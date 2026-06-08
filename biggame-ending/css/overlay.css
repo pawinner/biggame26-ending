@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: transparent !important; /* Critical for OBS browser source transparent background */
+  overflow: hidden;
+  width: 1920px;
+  height: 1080px;
+  color: #ffffff;
+}
+
+.obs-container {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Helper indicator that will only show when loaded outside of OBS (for testing) */
+.placeholder-overlay-badge {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.placeholder-overlay-badge p {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #818cf8;
+}
+
+.placeholder-overlay-badge span {
+  font-size: 0.75rem;
+  color: #10b981;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* Sample Overlay Animations */
+#overlay-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.glow-text {
+  font-size: 5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 30px rgba(254, 180, 123, 0.5));
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+}
+
+.fade-in {
+  animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
