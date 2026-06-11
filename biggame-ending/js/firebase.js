@@ -1,20 +1,22 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, onValue } from 'firebase/database';
+import { getAnalytics } from 'firebase/analytics';
 
-// Firebase configuration (Placeholder)
-// You will replace these details later from the Firebase Console.
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDNMu9-lXy-RHnxee2Fc7uBI-tE9fYBKOQ",
+  authDomain: "biggame26-ending.firebaseapp.com",
+  databaseURL: "https://biggame26-ending-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "biggame26-ending",
+  storageBucket: "biggame26-ending.firebasestorage.app",
+  messagingSenderId: "789565679516",
+  appId: "1:789565679516:web:0efb859d29338f38264a59",
+  measurementId: "G-2BDH98RY5J"
 };
 
 let app;
 let db;
+let analytics;
 let isInitialized = false;
 
 export function initFirebase() {
@@ -26,6 +28,12 @@ export function initFirebase() {
   try {
     app = initializeApp(firebaseConfig);
     db = getDatabase(app);
+    // Initialize analytics optionally (might fail or be blocked in OBS/certain environments, so wrap in try-catch)
+    try {
+      analytics = getAnalytics(app);
+    } catch (analyticsError) {
+      console.warn("Analytics initialization skipped or blocked:", analyticsError);
+    }
     isInitialized = true;
     return true;
   } catch (error) {
