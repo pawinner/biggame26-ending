@@ -1,7 +1,7 @@
-// Google Sheets Integration (Placeholder)
+// Google Sheets Integration
 // When you publish a Google Sheet to the web, you can copy the CSV export URL:
 // e.g., https://docs.google.com/spreadsheets/d/e/2PACX-xxxx/pub?output=csv
-const GOOGLE_SHEETS_CSV_URL = "";
+const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTCNuhwA18lOM0ZaOfz4UH9rqvt2f60ear2NXkA2TQrRuvXpS1HwK2ABCbVsqDh8MmO4U8KhprIotMP/pub?gid=60744963&single=true&output=csv";
 
 // Mock data to use when GOOGLE_SHEETS_CSV_URL is empty
 const mockTeamsData = [
@@ -43,19 +43,27 @@ function parseCsvData(csvText) {
   const lines = csvText.split(/\r?\n/);
   const results = [];
   
-  // Skip header line (e.g. Rank, House Name, Score)
-  for (let i = 1; i < lines.length; i++) {
+  for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;
     
     // Split values, handling commas
     const columns = line.split(',');
     if (columns.length >= 3) {
-      results.push({
-        rank: parseInt(columns[0]) || i,
-        name: columns[1].replace(/^"|"$/g, ''), // remove quotes
-        score: parseInt(columns[2]) || 0
-      });
+      const rankVal = parseInt(columns[0]);
+      const houseVal = columns[1] ? columns[1].trim() : "";
+      const scoreVal = parseInt(columns[2]);
+      
+      // Only process lines where Rank is a valid number and House is not empty
+      if (!isNaN(rankVal) && houseVal !== "") {
+        // Format house name (e.g. "5" -> "บ้าน 5")
+        const name = houseVal.startsWith("บ้าน") ? houseVal : `บ้าน ${houseVal}`;
+        results.push({
+          rank: rankVal,
+          name: name,
+          score: isNaN(scoreVal) ? 0 : scoreVal
+        });
+      }
     }
   }
   

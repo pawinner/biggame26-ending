@@ -63,7 +63,7 @@ function renderRanks(startRank, endRank) {
       <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 0.75rem 1.5rem;">
         <span style="font-weight: 700; color: #f59e0b; font-size: 1.25rem;">#${team.rank}</span>
         <span style="font-weight: 500; font-size: 1.25rem;">${team.name}</span>
-        <span style="color: #a5b4fc; font-weight: 600; font-size: 1.25rem;">${team.score} pts</span>
+        <span style="color: #a5b4fc; font-weight: 600; font-size: 1.25rem;">${team.score.toLocaleString()}</span>
       </div>
     `;
   });
@@ -90,7 +90,7 @@ function renderSingleRank(rankNum) {
     <h2 style="font-size: 3rem; color: ${color}; text-transform: uppercase; margin-bottom: 1rem;">${label}</h2>
     <div style="background: rgba(30, 41, 59, 0.85); border: 2px solid ${color}; border-radius: 24px; padding: 3rem 5rem; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
       <h1 class="glow-text" style="font-size: 4rem; filter: drop-shadow(0 0 20px ${color});">${team.name}</h1>
-      <p style="font-size: 2rem; color: ${color}; font-weight: 600; margin-top: 1rem;">${team.score} points</p>
+      <p style="font-size: 2rem; color: ${color}; font-weight: 600; margin-top: 1rem;">${team.score.toLocaleString()}</p>
     </div>
   `;
 }
@@ -109,7 +109,7 @@ function renderWinner() {
     <h2 style="font-size: 4rem; color: #fbbf24; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.1em; animation: pulse 1.5s infinite;">🏆 Camp Champion 🏆</h2>
     <div style="background: rgba(15, 23, 42, 0.9); border: 3px solid #fbbf24; border-radius: 30px; padding: 4rem 8rem; text-align: center; box-shadow: 0 0 80px rgba(251, 191, 36, 0.3);">
       <h1 class="glow-text" style="font-size: 6rem; background: linear-gradient(to right, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.6));">${team.name}</h1>
-      <p style="font-size: 2.5rem; color: #f59e0b; font-weight: 800; margin-top: 1.5rem;">Score: ${team.score} pts</p>
+      <p style="font-size: 2.5rem; color: #f59e0b; font-weight: 800; margin-top: 1.5rem;">Score: ${team.score.toLocaleString()}</p>
     </div>
   `;
 }
