@@ -232,11 +232,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 20px;
   width: 1700px;
-  height: 980px;
+  height: 1080px;
   margin: 0 auto;
-  padding-top: 10px;
 }
 
 .podium-top-section {
@@ -244,7 +244,6 @@ body {
   align-items: flex-end;
   justify-content: center;
   gap: 60px;
-  margin-bottom: 25px;
   width: 100%;
 }
 
