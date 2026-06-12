@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: 'aktiv-grotesk-thai', sans-serif;
+  font-family: 'Prompt', sans-serif;
   background: transparent !important; /* Critical for OBS browser source transparent background */
   overflow: hidden;
   width: 1920px;
@@ -144,7 +144,7 @@ body {
     0 10px 20px rgba(0, 0, 0, 0.6),
     inset 0 4px 4px rgba(255, 255, 255, 0.35),
     inset 0 -4px 4px rgba(0, 0, 0, 0.35);
-  font-family: 'aktiv-grotesk-thai', sans-serif;
+  font-family: 'Prompt', sans-serif;
   font-weight: 900;
   font-size: 2.2rem;
   color: #ffffff;

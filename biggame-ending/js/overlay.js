@@ -2,7 +2,10 @@ import { initFirebase, listenToOverlayState } from './firebase.js';
 import { fetchLeaderboardData } from './sheets.js';
 
 let currentData = [];
-let previousRevealLimit = 13;
+let previousRevealLimit = null;
+
+// Initialize whoosh sound
+const whooshSound = new Audio('/sounds/Whoosh.mp3');
 
 // Initialize Firebase
 const firebaseActive = initFirebase();
@@ -69,6 +72,9 @@ function handleStateChange(state) {
   const previousScene = currentSceneName;
   currentSceneName = newScene;
 
+  // Reset previous reveal limit on scene change to avoid playing sound on initial transition
+  previousRevealLimit = null;
+
   // Helper to cleanly trigger a fade-in animation
   const triggerFadeIn = () => {
     container.classList.remove('fade-in', 'fade-out');
@@ -104,6 +110,12 @@ function renderRanks(startRank, endRank, revealLimit) {
   if (!container) return;
 
   const limit = revealLimit !== undefined ? revealLimit : 4;
+
+  // Play whoosh sound when a new rank is revealed (limit decreases)
+  if (previousRevealLimit !== null && limit < previousRevealLimit && limit >= 4 && limit <= 12) {
+    whooshSound.currentTime = 0;
+    whooshSound.play().catch(err => console.log('Audio playback prevented or failed:', err));
+  }
 
   const getCardHtml = (rankNum) => {
     const team = currentData.find(t => t.rank === rankNum);
