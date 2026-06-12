@@ -151,3 +151,37 @@ body {
 .hide-btn:active {
   background: #111827;
 }
+
+/* Active Cue Highlight */
+.cue-btn.active {
+  background: var(--success-color) !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4) !important;
+  border: 2px solid white;
+}
+
+/* Reveal Control Buttons */
+.reveal-btn {
+  padding: 1rem !important;
+  font-size: 1rem !important;
+  border-radius: 10px !important;
+}
+
+#reveal-next-btn {
+  background: var(--success-color) !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2) !important;
+}
+
+#reveal-prev-btn {
+  background: #f59e0b !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2) !important;
+}
+
+#reveal-all-btn {
+  background: var(--primary-accent) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+}
+
+#reveal-none-btn {
+  background: var(--error-color) !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2) !important;
+}

@@ -91,3 +91,123 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Leaderboard Grid / Flexbox Layout */
+.leaderboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 1500px;
+  margin-top: 1rem;
+}
+
+.columns-row {
+  display: flex;
+  flex-direction: row;
+  gap: 120px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.leaderboard-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 690px;
+}
+
+.rank-card {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  background: linear-gradient(to bottom, #ca21d0 0%, #a817b0 48%, #8e0b96 52%, #600266 100%);
+  border: 3px solid #3d0043;
+  border-radius: 8px;
+  padding: 0 30px;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.6),
+    inset 0 4px 4px rgba(255, 255, 255, 0.35),
+    inset 0 -4px 4px rgba(0, 0, 0, 0.35);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 2.2rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+}
+
+.bottom-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.bottom-container .rank-card {
+  width: 690px;
+}
+
+/* Card Content Wrapper for Swipe Transition */
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+  margin-left: 20px;
+  position: relative;
+  height: 100%;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.card-content.revealed {
+  opacity: 1;
+}
+
+.card-content.just-revealed {
+  opacity: 1;
+  animation: swipeReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Glowing swipe leading edge */
+.card-content.just-revealed::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 120px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.85), transparent);
+  transform: skewX(-20deg);
+  animation: swipeGlow 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.team-name {
+  color: #ffffff;
+}
+
+.team-score {
+  color: #fbbf24; /* Golden color for score highlight */
+  font-weight: 800;
+  font-size: 2.0rem;
+  margin-right: 5px;
+}
+
+@keyframes swipeReveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes swipeGlow {
+  from {
+    left: -120px;
+  }
+  to {
+    left: 100%;
+  }
+}

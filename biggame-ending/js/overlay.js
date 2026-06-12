@@ -2,6 +2,7 @@ import { initFirebase, listenToOverlayState } from './firebase.js';
 import { fetchLeaderboardData } from './sheets.js';
 
 let currentData = [];
+let previousRevealLimit = 13;
 
 // Initialize Firebase
 const firebaseActive = initFirebase();
@@ -26,7 +27,7 @@ function handleStateChange(state) {
 
   switch (scene) {
     case 'rank-12-4':
-      renderRanks(12, 4);
+      renderRanks(12, 4, state.revealLimit);
       break;
     case 'rank-3':
       renderSingleRank(3);
@@ -49,27 +50,71 @@ function handleStateChange(state) {
 }
 
 // Render 12th to 4th leaderboard
-function renderRanks(startRank, endRank) {
+function renderRanks(startRank, endRank, revealLimit) {
   const container = document.getElementById('overlay-content');
-  const filtered = currentData.filter(team => team.rank <= startRank && team.rank >= endRank);
+  if (!container) return;
 
-  let html = `
-    <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: #818cf8; text-transform: uppercase;">Leaderboard (12th - 4th)</h2>
-    <div style="display: flex; flex-direction: column; gap: 1rem; width: 600px; max-height: 700px;">
-  `;
+  const limit = revealLimit !== undefined ? revealLimit : 4;
 
-  filtered.forEach(team => {
-    html += `
-      <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 0.75rem 1.5rem;">
-        <span style="font-weight: 700; color: #f59e0b; font-size: 1.25rem;">#${team.rank}</span>
-        <span style="font-weight: 500; font-size: 1.25rem;">${team.name}</span>
-        <span style="color: #a5b4fc; font-weight: 600; font-size: 1.25rem;">${team.score.toLocaleString()}</span>
+  const getCardHtml = (rankNum) => {
+    const team = currentData.find(t => t.rank === rankNum);
+    const name = team ? team.name : '';
+    const score = team ? team.score : 0;
+    const isRevealed = rankNum >= limit;
+    
+    let displayName = '';
+    let displayScore = '';
+    let animClass = '';
+    
+    if (isRevealed && name) {
+      displayName = name.toUpperCase();
+      displayScore = score.toLocaleString();
+      
+      // If it was just revealed in this transition, give it an active reveal animation
+      if (rankNum === limit && previousRevealLimit !== limit) {
+        animClass = 'just-revealed';
+      } else {
+        animClass = 'revealed';
+      }
+    }
+
+    return `
+      <div class="rank-card" data-rank="${rankNum}">
+        <span class="rank-number">${rankNum}.</span>
+        <div class="card-content ${animClass}">
+          <span class="team-name">${displayName}</span>
+          <span class="team-score">${displayScore}</span>
+        </div>
       </div>
     `;
-  });
+  };
 
-  html += `</div>`;
-  container.innerHTML = html;
+  const leftRanks = [4, 5, 6, 7];
+  const rightRanks = [8, 9, 10, 11];
+  const bottomRank = 12;
+
+  let leftHtml = leftRanks.map(r => getCardHtml(r)).join('');
+  let rightHtml = rightRanks.map(r => getCardHtml(r)).join('');
+  let bottomHtml = getCardHtml(bottomRank);
+
+  container.innerHTML = `
+    <div class="leaderboard-container">
+      <div class="columns-row">
+        <div class="leaderboard-column">
+          ${leftHtml}
+        </div>
+        <div class="leaderboard-column">
+          ${rightHtml}
+        </div>
+      </div>
+      <div class="bottom-container">
+        ${bottomHtml}
+      </div>
+    </div>
+  `;
+
+  // Update previousRevealLimit for next render
+  previousRevealLimit = limit;
 }
 
 // Render single ranking (e.g. 2nd or 3rd place highlight)
