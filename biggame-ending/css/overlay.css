@@ -226,3 +226,208 @@ body {
     left: 100%;
   }
 }
+
+/* Podium View Layout */
+.podium-view-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 1700px;
+  height: 980px;
+  margin: 0 auto;
+  padding-top: 10px;
+}
+
+.podium-top-section {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.podium-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 340px;
+}
+
+.podium-team-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 12px 20px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.podium-rank-label {
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 12px;
+  border-radius: 9999px;
+  margin-bottom: 6px;
+}
+
+.podium-rank-label.gold {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1.5px solid rgba(251, 191, 36, 0.5);
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+}
+
+.podium-rank-label.silver {
+  background: rgba(203, 213, 225, 0.15);
+  color: #cbd5e1;
+  border: 1.5px solid rgba(203, 213, 225, 0.5);
+  box-shadow: 0 0 10px rgba(203, 213, 225, 0.2);
+}
+
+.podium-rank-label.bronze {
+  background: rgba(180, 83, 9, 0.15);
+  color: #f59e0b;
+  border: 1.5px solid rgba(180, 83, 9, 0.5);
+  box-shadow: 0 0 10px rgba(180, 83, 9, 0.2);
+}
+
+.podium-team-name {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.first-place .podium-team-name {
+  font-size: 1.7rem;
+}
+
+.podium-team-score {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-top: 3px;
+}
+
+.first-place .podium-team-score {
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+}
+
+.second-place .podium-team-score {
+  color: #cbd5e1;
+  text-shadow: 0 0 10px rgba(203, 213, 225, 0.4);
+}
+
+.third-place .podium-team-score {
+  color: #f59e0b;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.podium-pedestal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.first-place .podium-pedestal {
+  height: 180px;
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.3) 0%, rgba(251, 191, 36, 0.05) 100%);
+  border: 3px solid #fbbf24;
+  border-bottom: none;
+}
+
+.second-place .podium-pedestal {
+  height: 120px;
+  background: linear-gradient(180deg, rgba(203, 213, 225, 0.3) 0%, rgba(203, 213, 225, 0.05) 100%);
+  border: 3px solid #cbd5e1;
+  border-bottom: none;
+}
+
+.third-place .podium-pedestal {
+  height: 80px;
+  background: linear-gradient(180deg, rgba(180, 83, 9, 0.3) 0%, rgba(180, 83, 9, 0.05) 100%);
+  border: 3px solid #b45309;
+  border-bottom: none;
+}
+
+.pedestal-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.first-place .pedestal-number {
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+}
+
+.second-place .pedestal-number {
+  color: #cbd5e1;
+  text-shadow: 0 0 20px rgba(203, 213, 225, 0.6);
+}
+
+.third-place .pedestal-number {
+  color: #d97706;
+  text-shadow: 0 0 20px rgba(180, 83, 9, 0.6);
+}
+
+.podium-bottom-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Compact Leaderboard styling for the podium page bottom section */
+.podium-view-container .leaderboard-container {
+  width: 1400px;
+  margin-top: 0;
+}
+
+.podium-view-container .columns-row {
+  gap: 60px;
+  margin-bottom: 12px;
+}
+
+.podium-view-container .leaderboard-column {
+  gap: 12px;
+  width: 670px;
+}
+
+.podium-view-container .bottom-container .rank-card {
+  width: 670px;
+}
+
+.podium-view-container .rank-card {
+  height: 52px;
+  font-size: 1.6rem;
+  padding: 0 20px;
+  border-width: 2.5px;
+}
+
+.podium-view-container .team-score {
+  font-size: 1.5rem;
+}
+
+.podium-view-container .card-content {
+  margin-left: 15px;
+}

@@ -43,6 +43,9 @@ function handleStateChange(state) {
       case 'winner':
         renderWinner();
         break;
+      case 'podium':
+        renderPodium();
+        break;
       case 'hide':
         container.innerHTML = ''; // Absolutely blank
         break;
@@ -212,10 +215,102 @@ function renderWinner() {
   }
 
   container.innerHTML = `
-    <h2 style="font-size: 4rem; color: #fbbf24; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.1em; animation: pulse 1.5s infinite;">🏆 Camp Champion 🏆</h2>
+    <h2 style="font-size: 4rem; color: #fbbf24; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.1em; animation: pulse 1.5s infinite;">🏆 Big Game Winner 🏆</h2>
     <div style="background: rgba(15, 23, 42, 0.9); border: 3px solid #fbbf24; border-radius: 30px; padding: 4rem 8rem; text-align: center; box-shadow: 0 0 80px rgba(251, 191, 36, 0.3);">
       <h1 class="glow-text" style="font-size: 6rem; background: linear-gradient(to right, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.6));">${team.name}</h1>
       <p style="font-size: 2.5rem; color: #f59e0b; font-weight: 800; margin-top: 1.5rem;">Score: ${team.score.toLocaleString()}</p>
+    </div>
+  `;
+}
+
+// Render podium (1st, 2nd, 3rd) and ranks 4-12
+function renderPodium() {
+  const container = document.getElementById('overlay-content');
+  if (!container) return;
+
+  const t1 = currentData.find(t => t.rank === 1);
+  const t2 = currentData.find(t => t.rank === 2);
+  const t3 = currentData.find(t => t.rank === 3);
+
+  const getCardHtml = (rankNum) => {
+    const team = currentData.find(t => t.rank === rankNum);
+    const name = team ? team.name : '';
+    const score = team ? team.score : 0;
+    
+    return `
+      <div class="rank-card" data-rank="${rankNum}">
+        <span class="rank-number">${rankNum}.</span>
+        <div class="card-content revealed">
+          <span class="team-name">${name.toUpperCase()}</span>
+          <span class="team-score">${score.toLocaleString()}</span>
+        </div>
+      </div>
+    `;
+  };
+
+  const leftRanks = [4, 5, 6, 7];
+  const rightRanks = [8, 9, 10, 11];
+  const bottomRank = 12;
+
+  let leftHtml = leftRanks.map(r => getCardHtml(r)).join('');
+  let rightHtml = rightRanks.map(r => getCardHtml(r)).join('');
+  let bottomHtml = getCardHtml(bottomRank);
+
+  container.innerHTML = `
+    <div class="podium-view-container">
+      <div class="podium-top-section">
+        <!-- 2nd Place -->
+        <div class="podium-column second-place">
+          <div class="podium-team-details">
+            <span class="podium-rank-label silver">2nd Place</span>
+            <div class="podium-team-name">${t2 ? t2.name.toUpperCase() : ''}</div>
+            <div class="podium-team-score">${t2 ? t2.score.toLocaleString() : '0'}</div>
+          </div>
+          <div class="podium-pedestal">
+            <span class="pedestal-number">2</span>
+          </div>
+        </div>
+
+        <!-- 1st Place -->
+        <div class="podium-column first-place">
+          <div class="podium-team-details">
+            <span class="podium-rank-label gold">🏆 1st Place 🏆</span>
+            <div class="podium-team-name">${t1 ? t1.name.toUpperCase() : ''}</div>
+            <div class="podium-team-score">${t1 ? t1.score.toLocaleString() : '0'}</div>
+          </div>
+          <div class="podium-pedestal">
+            <span class="pedestal-number">1</span>
+          </div>
+        </div>
+
+        <!-- 3rd Place -->
+        <div class="podium-column third-place">
+          <div class="podium-team-details">
+            <span class="podium-rank-label bronze">3rd Place</span>
+            <div class="podium-team-name">${t3 ? t3.name.toUpperCase() : ''}</div>
+            <div class="podium-team-score">${t3 ? t3.score.toLocaleString() : '0'}</div>
+          </div>
+          <div class="podium-pedestal">
+            <span class="pedestal-number">3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="podium-bottom-section">
+        <div class="leaderboard-container">
+          <div class="columns-row">
+            <div class="leaderboard-column">
+              ${leftHtml}
+            </div>
+            <div class="leaderboard-column">
+              ${rightHtml}
+            </div>
+          </div>
+          <div class="bottom-container">
+            ${bottomHtml}
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }
