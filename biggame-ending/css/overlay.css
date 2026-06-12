@@ -113,7 +113,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 1500px;
+  width: 1760px;
   margin-top: 1rem;
 }
 
@@ -129,13 +129,13 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 690px;
+  width: 820px;
 }
 
 .rank-card {
   display: flex;
   align-items: center;
-  height: 80px;
+  height: 90px;
   background: linear-gradient(to bottom, #ca21d0 0%, #a817b0 48%, #8e0b96 52%, #600266 100%);
   border: 3px solid #3d0043;
   border-radius: 8px;
@@ -146,7 +146,7 @@ body {
     inset 0 -4px 4px rgba(0, 0, 0, 0.35);
   font-family: 'Prompt', sans-serif;
   font-weight: 900;
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -161,7 +161,7 @@ body {
 }
 
 .bottom-container .rank-card {
-  width: 690px;
+  width: 820px;
 }
 
 /* Card Content Wrapper for Swipe Transition */
@@ -205,7 +205,7 @@ body {
 .team-score {
   color: #fbbf24; /* Golden color for score highlight */
   font-weight: 800;
-  font-size: 2.0rem;
+  font-size: 2.3rem;
   margin-right: 5px;
 }
 
@@ -233,8 +233,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  width: 1700px;
+  gap: 30px;
+  width: 1800px;
   height: 1080px;
   margin: 0 auto;
 }
@@ -243,7 +243,7 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 60px;
+  gap: 70px;
   width: 100%;
 }
 
@@ -252,7 +252,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  width: 340px;
+  width: 440px;
 }
 
 .podium-team-details {
@@ -264,21 +264,21 @@ body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 16px;
-  padding: 12px 20px;
+  padding: 15px 25px;
   width: 100%;
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 .podium-rank-label {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 3px 12px;
+  padding: 4px 14px;
   border-radius: 9999px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .podium-rank-label.gold {
@@ -303,7 +303,7 @@ body {
 }
 
 .podium-team-name {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   font-weight: 900;
   color: #ffffff;
   white-space: nowrap;
@@ -314,13 +314,13 @@ body {
 }
 
 .first-place .podium-team-name {
-  font-size: 1.7rem;
+  font-size: 2.2rem;
 }
 
 .podium-team-score {
-  font-size: 1.25rem;
+  font-size: 1.6rem;
   font-weight: 800;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 .first-place .podium-team-score {
@@ -349,28 +349,28 @@ body {
 }
 
 .first-place .podium-pedestal {
-  height: 180px;
+  height: 200px;
   background: linear-gradient(180deg, rgba(251, 191, 36, 0.3) 0%, rgba(251, 191, 36, 0.05) 100%);
   border: 3px solid #fbbf24;
   border-bottom: none;
 }
 
 .second-place .podium-pedestal {
-  height: 120px;
+  height: 140px;
   background: linear-gradient(180deg, rgba(203, 213, 225, 0.3) 0%, rgba(203, 213, 225, 0.05) 100%);
   border: 3px solid #cbd5e1;
   border-bottom: none;
 }
 
 .third-place .podium-pedestal {
-  height: 80px;
+  height: 95px;
   background: linear-gradient(180deg, rgba(180, 83, 9, 0.3) 0%, rgba(180, 83, 9, 0.05) 100%);
   border: 3px solid #b45309;
   border-bottom: none;
 }
 
 .pedestal-number {
-  font-size: 3.5rem;
+  font-size: 4.5rem;
   font-weight: 900;
   line-height: 1;
 }
@@ -398,7 +398,7 @@ body {
 
 /* Compact Leaderboard styling for the podium page bottom section */
 .podium-view-container .leaderboard-container {
-  width: 1400px;
+  width: 1760px;
   margin-top: 0;
 }
 
@@ -409,22 +409,22 @@ body {
 
 .podium-view-container .leaderboard-column {
   gap: 12px;
-  width: 670px;
+  width: 850px;
 }
 
 .podium-view-container .bottom-container .rank-card {
-  width: 670px;
+  width: 850px;
 }
 
 .podium-view-container .rank-card {
-  height: 52px;
-  font-size: 1.6rem;
-  padding: 0 20px;
+  height: 64px;
+  font-size: 1.9rem;
+  padding: 0 25px;
   border-width: 2.5px;
 }
 
 .podium-view-container .team-score {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .podium-view-container .card-content {
