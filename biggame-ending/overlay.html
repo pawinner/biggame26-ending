@@ -4,19 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Big Game Overlay - OBS 1920x1080</title>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <!-- Adobe Fonts (JS required for Thai font subsetting) -->
+  <script src="https://use.typekit.net/xqn5vhp.js"></script>
+  <script>try{Typekit.load({ async: true });}catch(e){}</script>
   <link rel="stylesheet" href="./css/overlay.css">
 </head>
 <body>
   <!-- OBS Canvas Layout -->
   <div class="obs-container">
-    <div class="placeholder-overlay-badge">
-      <p>OBS Browser Source Overlay (1920x1080)</p>
-      <span>Transparent Background Ready</span>
-    </div>
 
     <!-- Leaderboard / winner cards will be dynamic container here -->
     <div id="overlay-content" class="fade-in">

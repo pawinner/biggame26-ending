@@ -14,38 +14,87 @@ async function loadData() {
   console.log("Overlay data loaded:", currentData);
 }
 
+let currentSceneName = null;
+let transitionTimeout = null;
+
 // Render dynamic layouts based on control scene state
 function handleStateChange(state) {
   const container = document.getElementById('overlay-content');
   if (!container) return;
 
-  // Clear active styling classes
-  container.className = 'fade-in';
-  
-  const scene = state.currentScene || 'reset';
-  console.log(`Transitioning to overlay scene: ${scene}`);
+  const newScene = state.currentScene || 'reset';
+  console.log(`State update received. Target scene: ${newScene}`);
 
-  switch (scene) {
-    case 'rank-12-4':
-      renderRanks(12, 4, state.revealLimit);
-      break;
-    case 'rank-3':
-      renderSingleRank(3);
-      break;
-    case 'rank-2':
-      renderSingleRank(2);
-      break;
-    case 'winner':
-      renderWinner();
-      break;
-    case 'hide':
-    case 'reset':
-    default:
-      container.innerHTML = `
-        <h1 class="glow-text">Ready for Cue</h1>
-        <p class="subtitle">Waiting for controller events...</p>
-      `;
-      break;
+  // Helper to render the content for the target scene
+  const performRender = () => {
+    switch (newScene) {
+      case 'rank-12-4':
+        renderRanks(12, 4, state.revealLimit);
+        break;
+      case 'rank-3':
+        renderSingleRank(3);
+        break;
+      case 'rank-2':
+        renderSingleRank(2);
+        break;
+      case 'winner':
+        renderWinner();
+        break;
+      case 'hide':
+        container.innerHTML = ''; // Absolutely blank
+        break;
+      case 'reset':
+      default:
+        container.innerHTML = `
+          <h1 class="glow-text">Ready for Cue</h1>
+          <p class="subtitle">Waiting for controller events...</p>
+        `;
+        break;
+    }
+  };
+
+  // If we are already in this scene, just update content (e.g. reveal limit changes)
+  if (newScene === currentSceneName) {
+    performRender();
+    return;
+  }
+
+  // Clear any existing transition timeout
+  if (transitionTimeout) {
+    clearTimeout(transitionTimeout);
+    transitionTimeout = null;
+  }
+
+  // Record the new scene name
+  const previousScene = currentSceneName;
+  currentSceneName = newScene;
+
+  // Helper to cleanly trigger a fade-in animation
+  const triggerFadeIn = () => {
+    container.classList.remove('fade-in', 'fade-out');
+    void container.offsetWidth; // Force layout reflow
+    container.classList.add('fade-in');
+  };
+
+  // If the previous scene was 'hide' or it's the initial load (previousScene === null),
+  // we do not need to fade out (since it is already blank or just starting up).
+  const shouldFadeOut = previousScene !== null && previousScene !== 'hide';
+
+  if (shouldFadeOut) {
+    // Add fade-out class to trigger animation
+    container.classList.remove('fade-in');
+    container.classList.add('fade-out');
+
+    // Wait for the fade-out animation to complete (500ms) before rendering and fading in
+    transitionTimeout = setTimeout(() => {
+      performRender();
+      triggerFadeIn();
+      transitionTimeout = null;
+    }, 500);
+  } else {
+    // Just render directly and apply fade-in
+    performRender();
+    triggerFadeIn();
   }
 }
 
