@@ -7,8 +7,14 @@ let state = {
   durationMs: 60000,
   isRunning: false,
   isPaused: false,
-  pausedAt: 0
+  pausedAt: 0,
+  disaster: false
 };
+
+// Initialize Disaster Sound
+const disasterSound = new Audio('/sounds/disaster.mp3');
+disasterSound.volume = 0.8;
+disasterSound.preload = 'auto';
 
 // Initialize Firebase
 const isConnected = initFirebaseTimer();
@@ -29,15 +35,32 @@ if (isConnected) {
   });
 
   listenToTimerState((newState) => {
-    state = newState;
+    handleStateUpdate(newState);
   });
 } else {
   // Local storage fallback
   connStatus.className = 'status-badge status-disconnected';
   connStatusText.textContent = 'Local Only';
   listenToTimerState((newState) => {
-    state = newState;
+    handleStateUpdate(newState);
   });
+}
+
+function handleStateUpdate(newState) {
+  // Check if disaster state transitioned
+  if (newState && newState.disaster) {
+    document.body.classList.add('disaster-flash');
+    if (disasterSound.paused) {
+      disasterSound.currentTime = 0;
+      disasterSound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
+    }
+  } else {
+    document.body.classList.remove('disaster-flash');
+    disasterSound.pause();
+    disasterSound.currentTime = 0;
+  }
+
+  state = newState;
 }
 
 // Render loop using requestAnimationFrame
@@ -118,7 +141,8 @@ window.addEventListener('keydown', (e) => {
       durationMs: 60000,
       isRunning: true,
       isPaused: false,
-      pausedAt: 0
+      pausedAt: 0,
+      disaster: false
     };
     setTimerState(newState);
   } else if (e.key === ' ' || key === 'p') {
@@ -139,6 +163,20 @@ window.addEventListener('keydown', (e) => {
       }
       setTimerState(newState);
     }
+  } else if (key === 'd') {
+    // Toggle Disaster Mode
+    const newState = { ...state };
+    if (!state.disaster) {
+      newState.disaster = true;
+      // Pause timer if it is currently running
+      if (state.isRunning && !state.isPaused) {
+        newState.isPaused = true;
+        newState.pausedAt = Date.now();
+      }
+    } else {
+      newState.disaster = false;
+    }
+    setTimerState(newState);
   } else if (e.key === 'Escape' || key === 'r') {
     // Reset / Stop
     const newState = {
@@ -146,7 +184,8 @@ window.addEventListener('keydown', (e) => {
       durationMs: 60000,
       isRunning: false,
       isPaused: false,
-      pausedAt: 0
+      pausedAt: 0,
+      disaster: false
     };
     setTimerState(newState);
   }

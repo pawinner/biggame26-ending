@@ -7,7 +7,8 @@ let state = {
   durationMs: 60000,
   isRunning: false,
   isPaused: false,
-  pausedAt: 0
+  pausedAt: 0,
+  disaster: false
 };
 
 // Initialize Firebase
@@ -29,15 +30,31 @@ if (isConnected) {
   });
 
   listenToTimerState((newState) => {
-    state = newState;
+    handleStateUpdate(newState);
   });
 } else {
   // Local storage fallback
   connStatus.className = 'status-badge status-disconnected';
   connStatusText.textContent = 'Local Only';
   listenToTimerState((newState) => {
-    state = newState;
+    handleStateUpdate(newState);
   });
+}
+
+function handleStateUpdate(newState) {
+  const disasterOverlay = document.getElementById('disaster-overlay');
+  
+  if (newState && newState.disaster) {
+    if (disasterOverlay) {
+      disasterOverlay.style.display = 'flex';
+    }
+  } else {
+    if (disasterOverlay) {
+      disasterOverlay.style.display = 'none';
+    }
+  }
+
+  state = newState;
 }
 
 // Render loop using requestAnimationFrame
