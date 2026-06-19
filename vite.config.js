@@ -6,7 +6,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        simple: resolve(__dirname, 'simple-project/index.html'),
+        timer: resolve(__dirname, 'wood-timer/index.html'),
+        staff: resolve(__dirname, 'wood-timer/staff.html'),
         overlay: resolve(__dirname, 'biggame-ending/overlay.html'),
         control: resolve(__dirname, 'biggame-ending/control.html')
       }

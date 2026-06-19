@@ -1,4 +1,7 @@
+import { inject } from '@vercel/analytics';
 import { initFirebase, setOverlayState, listenToOverlayState } from './firebase.js';
+
+inject();
 
 document.addEventListener('DOMContentLoaded', () => {
   const statusBar = document.getElementById('status-bar');

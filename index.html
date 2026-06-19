@@ -182,17 +182,31 @@
     </header>
 
     <div class="grid">
-      <!-- Simple Project Link -->
-      <a href="/simple-project/index.html" class="card">
+      <!-- Wood Spawning Controller Link -->
+      <a href="/wood-timer/index.html" class="card">
         <div>
-          <span class="badge badge-dev">Ready to Code</span>
+          <span class="badge badge-ready">Live Controller</span>
           <div class="card-content">
-            <h2>Simple Project</h2>
-            <p>Your easy, single-page web app to build first. Quick styling and scripting template.</p>
+            <h2>Wood Spawning Board</h2>
+            <p>Big Screen timer displaying the circular iOS-style countdown. Controls wood spawning via hotkeys (1, Space, Esc).</p>
           </div>
         </div>
         <div class="card-link">
-          Open Project <span>&rarr;</span>
+          Open Controller <span>&rarr;</span>
+        </div>
+      </a>
+
+      <!-- Staff Viewer Link -->
+      <a href="/wood-timer/staff.html" class="card">
+        <div>
+          <span class="badge badge-ready">Mobile Sync</span>
+          <div class="card-content">
+            <h2>Staff Mobile Timer</h2>
+            <p>Mobile-friendly real-time countdown viewer for staff. Synchronized via Firebase, read-only display.</p>
+          </div>
+        </div>
+        <div class="card-link">
+          Open Staff View <span>&rarr;</span>
         </div>
       </a>
 
@@ -229,5 +243,9 @@
       <p>&copy; 2026 MDCU Freshy Camp. Designed with &hearts; for real-time presentation.</p>
     </footer>
   </div>
+  <script type="module">
+    import { inject } from '@vercel/analytics';
+    inject();
+  </script>
 </body>
 </html>

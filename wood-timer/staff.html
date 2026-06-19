@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Timer - MDCU 2026</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="staff-body">
+  <div class="back-link-container">
+    <a href="../index.html" class="back-link">&larr; Back</a>
+  </div>
+
+  <main class="container" id="timer-app">
+    <header>
+      <h1>Wood Spawning</h1>
+      <p class="subtitle">Staff Mobile View (Sync)</p>
+    </header>
+
+    <!-- Circular Timer Progress -->
+    <div class="timer-container" id="timer-visual-container">
+      <svg class="timer-svg" viewBox="0 0 320 320">
+        <!-- Background ring -->
+        <circle class="timer-circle-bg" cx="160" cy="160" r="140"></circle>
+        <!-- Dynamic overlay ring -->
+        <circle class="timer-circle-progress" id="timer-progress" cx="160" cy="160" r="140" stroke-dasharray="880" stroke-dashoffset="0"></circle>
+      </svg>
+      <div class="timer-text-container">
+        <span class="time-display" id="time-display">--</span>
+        <span class="time-label" id="time-label">Syncing...</span>
+      </div>
+    </div>
+
+    <!-- Cycle badge (shows active loop index) -->
+    <div id="cycle-badge-container">
+      <span class="cycle-badge" id="cycle-badge" style="display: none;">Cycle #1</span>
+      <span class="state-paused-badge" id="paused-badge" style="display: none;">PAUSED</span>
+    </div>
+
+    <!-- Minimal Connection Panel -->
+    <section class="panel" style="max-width: 320px; padding: 1rem;">
+      <div class="status-badge status-disconnected" id="conn-status" style="margin-bottom: 0;">
+        <span class="status-dot"></span>
+        <span id="conn-status-text">Disconnected</span>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./staff.js"></script>
+</body>
+</html>

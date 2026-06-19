@@ -1,5 +1,8 @@
+import { inject } from '@vercel/analytics';
 import { initFirebase, listenToOverlayState } from './firebase.js';
 import { fetchLeaderboardData } from './sheets.js';
+
+inject();
 
 let currentData = [];
 let previousRevealLimit = null;
