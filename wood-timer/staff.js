@@ -11,6 +11,44 @@ let state = {
   disaster: false
 };
 
+// Initialize Beep Sound (played when clock hits 0)
+const beep2Sound = new Audio('/sounds/beep2.mp3');
+beep2Sound.volume = 0.8;
+beep2Sound.preload = 'auto';
+
+let lastCycle = 1;
+let lastStartTime = 0;
+
+// Unlock audio context on user interaction
+const soundStatus = document.getElementById('sound-status');
+const soundStatusText = document.getElementById('sound-status-text');
+
+function unlockAudio() {
+  beep2Sound.play().then(() => {
+    beep2Sound.pause();
+    beep2Sound.currentTime = 0;
+    if (soundStatus) {
+      soundStatus.style.background = 'rgba(16, 185, 129, 0.1)';
+      soundStatus.style.color = 'var(--success-color)';
+      soundStatus.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+    }
+    if (soundStatusText) {
+      soundStatusText.textContent = '🔊 Sound Enabled';
+    }
+  }).catch((err) => {
+    console.error("Audio unlock failed:", err);
+  });
+}
+
+if (soundStatus) {
+  soundStatus.addEventListener('click', unlockAudio, { once: true });
+}
+window.addEventListener('click', () => {
+  if (soundStatusText && soundStatusText.textContent !== '🔊 Sound Enabled') {
+    unlockAudio();
+  }
+}, { once: true });
+
 // Initialize Firebase
 const isConnected = initFirebaseTimer();
 
@@ -73,24 +111,59 @@ function updateUI() {
     cycleBadge.style.display = 'none';
     pausedBadge.style.display = 'none';
     timerApp.classList.remove('low-time');
+    lastCycle = 1;
+    lastStartTime = 0;
     return;
+  }
+
+  // Detect restart
+  if (state.startTime !== lastStartTime) {
+    lastCycle = 1;
+    lastStartTime = state.startTime;
   }
 
   let remainingTimeMs = 0;
   let cycle = 1;
+  let elapsedMs = 0;
 
   if (state.isPaused) {
-    const elapsedBeforePause = state.pausedAt - state.startTime;
-    cycle = Math.floor(elapsedBeforePause / state.durationMs) + 1;
-    const msInCycle = elapsedBeforePause % state.durationMs;
-    remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
+    elapsedMs = state.pausedAt - state.startTime;
     pausedBadge.style.display = 'inline-block';
   } else {
-    const elapsedMs = Date.now() - state.startTime;
-    cycle = Math.floor(elapsedMs / state.durationMs) + 1;
-    const msInCycle = elapsedMs % state.durationMs;
-    remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
+    elapsedMs = Date.now() - state.startTime;
     pausedBadge.style.display = 'none';
+  }
+
+  const countdownDurationMs = 3000;
+
+  if (elapsedMs < countdownDurationMs) {
+    cycle = 1;
+    // Update cycle info badge
+    cycleBadge.style.display = 'inline-block';
+    cycleBadge.textContent = `Wood Spawn #1`;
+
+    // Keep circle full
+    progressCircle.style.strokeDashoffset = '0';
+
+    // 3-2-1 countdown
+    const countdownSeconds = Math.ceil((countdownDurationMs - elapsedMs) / 1000);
+    timeDisplay.textContent = countdownSeconds;
+    timeLabel.textContent = 'Get Ready';
+    timerApp.classList.remove('low-time');
+    return;
+  }
+
+  // Adjust elapsed time by subtracting the countdown duration
+  const timerElapsedMs = elapsedMs - countdownDurationMs;
+  cycle = Math.floor(timerElapsedMs / state.durationMs) + 1;
+  const msInCycle = timerElapsedMs % state.durationMs;
+  remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
+
+  // Play beep2.mp3 when the clock hits 0 on every loop
+  if (cycle > lastCycle) {
+    beep2Sound.currentTime = 0;
+    beep2Sound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
+    lastCycle = cycle;
   }
 
   // Update cycle info badge

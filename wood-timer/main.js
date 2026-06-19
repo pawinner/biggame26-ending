@@ -16,6 +16,11 @@ const disasterSound = new Audio('/sounds/disaster.mp3');
 disasterSound.volume = 0.8;
 disasterSound.preload = 'auto';
 
+// Initialize Beep 1 Sound (played when start/restarting)
+const beep1Sound = new Audio('/sounds/beep1.mp3');
+beep1Sound.volume = 0.8;
+beep1Sound.preload = 'auto';
+
 // Initialize Firebase
 const isConnected = initFirebaseTimer();
 
@@ -84,20 +89,40 @@ function updateUI() {
 
   let remainingTimeMs = 0;
   let cycle = 1;
+  let elapsedMs = 0;
 
   if (state.isPaused) {
-    const elapsedBeforePause = state.pausedAt - state.startTime;
-    cycle = Math.floor(elapsedBeforePause / state.durationMs) + 1;
-    const msInCycle = elapsedBeforePause % state.durationMs;
-    remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
+    elapsedMs = state.pausedAt - state.startTime;
     pausedBadge.style.display = 'inline-block';
   } else {
-    const elapsedMs = Date.now() - state.startTime;
-    cycle = Math.floor(elapsedMs / state.durationMs) + 1;
-    const msInCycle = elapsedMs % state.durationMs;
-    remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
+    elapsedMs = Date.now() - state.startTime;
     pausedBadge.style.display = 'none';
   }
+
+  const countdownDurationMs = 3000;
+
+  if (elapsedMs < countdownDurationMs) {
+    cycle = 1;
+    // Update cycle info badge
+    cycleBadge.style.display = 'inline-block';
+    cycleBadge.textContent = `Wood Spawn #1`;
+
+    // Keep circle full
+    progressCircle.style.strokeDashoffset = '0';
+
+    // 3-2-1 countdown
+    const countdownSeconds = Math.ceil((countdownDurationMs - elapsedMs) / 1000);
+    timeDisplay.textContent = countdownSeconds;
+    timeLabel.textContent = 'Get Ready';
+    timerApp.classList.remove('low-time');
+    return;
+  }
+
+  // Adjust elapsed time by subtracting the countdown duration
+  const timerElapsedMs = elapsedMs - countdownDurationMs;
+  cycle = Math.floor(timerElapsedMs / state.durationMs) + 1;
+  const msInCycle = timerElapsedMs % state.durationMs;
+  remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
 
   // Update cycle info badge
   cycleBadge.style.display = 'inline-block';
@@ -135,6 +160,10 @@ window.addEventListener('keydown', (e) => {
   const key = e.key.toLowerCase();
 
   if (key === '1') {
+    // Play beep1
+    beep1Sound.currentTime = 0;
+    beep1Sound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
+
     // Start / Restart Loop (60s)
     const newState = {
       startTime: Date.now(),
