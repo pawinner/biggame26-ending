@@ -19,35 +19,26 @@ beep2Sound.preload = 'auto';
 let lastCycle = 1;
 let lastStartTime = 0;
 
-// Unlock audio context on user interaction
-const soundStatus = document.getElementById('sound-status');
-const soundStatusText = document.getElementById('sound-status-text');
+// Unlock audio context on user interaction (Welcome Popup Modal)
+const welcomeOverlay = document.getElementById('welcome-overlay');
+const welcomeBtn = document.getElementById('welcome-btn');
 
-function unlockAudio() {
-  beep2Sound.play().then(() => {
-    beep2Sound.pause();
-    beep2Sound.currentTime = 0;
-    if (soundStatus) {
-      soundStatus.style.background = 'rgba(16, 185, 129, 0.1)';
-      soundStatus.style.color = 'var(--success-color)';
-      soundStatus.style.borderColor = 'rgba(16, 185, 129, 0.2)';
-    }
-    if (soundStatusText) {
-      soundStatusText.textContent = '🔊 Sound Enabled';
-    }
-  }).catch((err) => {
-    console.error("Audio unlock failed:", err);
+function handleWelcomeClick() {
+  // Play the sound fully to test it and unlock browser audio policy
+  beep2Sound.currentTime = 0;
+  beep2Sound.play().catch((err) => {
+    console.error("Audio unlock/play failed:", err);
   });
+
+  // Hide the welcome overlay
+  if (welcomeOverlay) {
+    welcomeOverlay.style.display = 'none';
+  }
 }
 
-if (soundStatus) {
-  soundStatus.addEventListener('click', unlockAudio, { once: true });
+if (welcomeBtn) {
+  welcomeBtn.addEventListener('click', handleWelcomeClick, { once: true });
 }
-window.addEventListener('click', () => {
-  if (soundStatusText && soundStatusText.textContent !== '🔊 Sound Enabled') {
-    unlockAudio();
-  }
-}, { once: true });
 
 // Initialize Firebase
 const isConnected = initFirebaseTimer();
