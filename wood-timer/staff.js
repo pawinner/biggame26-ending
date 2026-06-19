@@ -107,12 +107,6 @@ function updateUI() {
     return;
   }
 
-  // Detect restart
-  if (state.startTime !== lastStartTime) {
-    lastCycle = 1;
-    lastStartTime = state.startTime;
-  }
-
   let remainingTimeMs = 0;
   let cycle = 1;
   let elapsedMs = 0;
@@ -126,6 +120,17 @@ function updateUI() {
   }
 
   const countdownDurationMs = 3000;
+
+  // Detect restart or resume (shift of startTime)
+  if (state.startTime !== lastStartTime) {
+    if (elapsedMs < countdownDurationMs) {
+      lastCycle = 1;
+    } else {
+      const timerElapsedMs = elapsedMs - countdownDurationMs;
+      lastCycle = Math.floor(timerElapsedMs / state.durationMs) + 1;
+    }
+    lastStartTime = state.startTime;
+  }
 
   if (elapsedMs < countdownDurationMs) {
     cycle = 1;
