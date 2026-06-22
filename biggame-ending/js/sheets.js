@@ -52,7 +52,7 @@ function parseCsvData(csvText) {
     if (columns.length >= 3) {
       const rankVal = parseInt(columns[0]);
       const houseVal = columns[1] ? columns[1].trim() : "";
-      const scoreVal = parseInt(columns[2]);
+      const scoreVal = parseFloat(columns[2]);
       
       // Only process lines where Rank is a valid number and House is not empty
       if (!isNaN(rankVal) && houseVal !== "") {

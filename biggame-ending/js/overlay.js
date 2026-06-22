@@ -135,7 +135,7 @@ function renderRanks(startRank, endRank, revealLimit) {
     
     if (isRevealed && name) {
       displayName = name.toUpperCase();
-      displayScore = score.toLocaleString();
+      displayScore = score.toLocaleString(undefined, { maximumFractionDigits: 4 });
       
       // If it was just revealed in this transition, give it an active reveal animation
       if (rankNum === limit && previousRevealLimit !== limit) {
@@ -202,7 +202,7 @@ function renderSingleRank(rankNum) {
     <h2 style="font-size: 3rem; color: ${color}; text-transform: uppercase; margin-bottom: 1rem;">${label}</h2>
     <div style="background: rgba(30, 41, 59, 0.85); border: 2px solid ${color}; border-radius: 24px; padding: 3rem 5rem; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
       <h1 class="glow-text" style="font-size: 4rem; filter: drop-shadow(0 0 20px ${color});">${team.name}</h1>
-      <p style="font-size: 2rem; color: ${color}; font-weight: 600; margin-top: 1rem;">${team.score.toLocaleString()}</p>
+      <p style="font-size: 2rem; color: ${color}; font-weight: 600; margin-top: 1rem;">${team.score.toLocaleString(undefined, { maximumFractionDigits: 4 })}</p>
     </div>
   `;
 }
@@ -221,7 +221,7 @@ function renderWinner() {
     <h2 style="font-size: 4rem; color: #fbbf24; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.1em; animation: pulse 1.5s infinite;">🏆 Big Game Winner 🏆</h2>
     <div style="background: rgba(15, 23, 42, 0.9); border: 3px solid #fbbf24; border-radius: 30px; padding: 4rem 8rem; text-align: center; box-shadow: 0 0 80px rgba(251, 191, 36, 0.3);">
       <h1 class="glow-text" style="font-size: 6rem; background: linear-gradient(to right, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.6));">${team.name}</h1>
-      <p style="font-size: 2.5rem; color: #f59e0b; font-weight: 800; margin-top: 1.5rem;">Score: ${team.score.toLocaleString()}</p>
+      <p style="font-size: 2.5rem; color: #f59e0b; font-weight: 800; margin-top: 1.5rem;">Score: ${team.score.toLocaleString(undefined, { maximumFractionDigits: 4 })}</p>
     </div>
   `;
 }
@@ -245,7 +245,7 @@ function renderPodium() {
         <span class="rank-number">${rankNum}.</span>
         <div class="card-content revealed">
           <span class="team-name">${name.toUpperCase()}</span>
-          <span class="team-score">${score.toLocaleString()}</span>
+          <span class="team-score">${score.toLocaleString(undefined, { maximumFractionDigits: 4 })}</span>
         </div>
       </div>
     `;
@@ -267,7 +267,7 @@ function renderPodium() {
           <div class="podium-team-details">
             <span class="podium-rank-label silver">2nd Place</span>
             <div class="podium-team-name">${t2 ? t2.name.toUpperCase() : ''}</div>
-            <div class="podium-team-score">${t2 ? t2.score.toLocaleString() : '0'}</div>
+            <div class="podium-team-score">${t2 ? t2.score.toLocaleString(undefined, { maximumFractionDigits: 4 }) : '0'}</div>
           </div>
           <div class="podium-pedestal">
             <span class="pedestal-number">2</span>
@@ -279,7 +279,7 @@ function renderPodium() {
           <div class="podium-team-details">
             <span class="podium-rank-label gold">🏆 1st Place 🏆</span>
             <div class="podium-team-name">${t1 ? t1.name.toUpperCase() : ''}</div>
-            <div class="podium-team-score">${t1 ? t1.score.toLocaleString() : '0'}</div>
+            <div class="podium-team-score">${t1 ? t1.score.toLocaleString(undefined, { maximumFractionDigits: 4 }) : '0'}</div>
           </div>
           <div class="podium-pedestal">
             <span class="pedestal-number">1</span>
@@ -291,7 +291,7 @@ function renderPodium() {
           <div class="podium-team-details">
             <span class="podium-rank-label bronze">3rd Place</span>
             <div class="podium-team-name">${t3 ? t3.name.toUpperCase() : ''}</div>
-            <div class="podium-team-score">${t3 ? t3.score.toLocaleString() : '0'}</div>
+            <div class="podium-team-score">${t3 ? t3.score.toLocaleString(undefined, { maximumFractionDigits: 4 }) : '0'}</div>
           </div>
           <div class="podium-pedestal">
             <span class="pedestal-number">3</span>
