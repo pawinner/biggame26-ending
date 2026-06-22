@@ -5,6 +5,10 @@ import { fetchLeaderboardData } from './sheets.js';
 inject();
 
 let currentData = [];
+let extraPrizesData = {
+  badLuck: { prize: "ดวงซวยแห่งปี", houses: "" },
+  goodCitizen: { prize: "คนดีของสังคม", houses: "" }
+};
 let previousRevealLimit = null;
 
 // Initialize whoosh sound
@@ -16,8 +20,10 @@ console.log(`Firebase status in Overlay: ${firebaseActive ? 'Connected' : 'Local
 
 // Initial load of sheet data
 async function loadData() {
-  currentData = await fetchLeaderboardData();
-  console.log("Overlay data loaded:", currentData);
+  const data = await fetchLeaderboardData();
+  currentData = data.leaderboard;
+  extraPrizesData = data.extraPrizes;
+  console.log("Overlay data loaded:", currentData, "Extra prizes:", extraPrizesData);
 }
 
 let currentSceneName = null;
@@ -48,6 +54,12 @@ function handleStateChange(state) {
         break;
       case 'podium':
         renderPodium();
+        break;
+      case 'prize-badluck':
+        renderExtraPrize('badLuck');
+        break;
+      case 'prize-good':
+        renderExtraPrize('goodCitizen');
         break;
       case 'hide':
         container.innerHTML = ''; // Absolutely blank
@@ -314,6 +326,41 @@ function renderPodium() {
           </div>
         </div>
       </div>
+    </div>
+  `;
+}
+
+function renderExtraPrize(prizeKey) {
+  const container = document.getElementById('overlay-content');
+  const prizeInfo = extraPrizesData[prizeKey];
+
+  if (!prizeInfo || !prizeInfo.houses) {
+    container.innerHTML = `<h1 class="glow-text">Special Prize</h1><p class="subtitle">No data found</p>`;
+    return;
+  }
+
+  // Choose style tokens based on prize
+  let titleColor, gradientBg, glowColor, iconEmoji;
+  if (prizeKey === 'badLuck') {
+    titleColor = '#f43f5e'; // Vibrant pink/red
+    gradientBg = 'linear-gradient(to right, #f43f5e, #e11d48)';
+    glowColor = 'rgba(244, 63, 94, 0.6)';
+    iconEmoji = '👻';
+  } else {
+    titleColor = '#10b981'; // Vibrant emerald green
+    gradientBg = 'linear-gradient(to right, #10b981, #059669)';
+    glowColor = 'rgba(16, 185, 129, 0.6)';
+    iconEmoji = '😇';
+  }
+
+  container.innerHTML = `
+    <h2 style="font-size: 5rem; color: ${titleColor}; text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 0.05em; font-weight: 800;">
+      ${iconEmoji} ${prizeInfo.prize} ${iconEmoji}
+    </h2>
+    <div style="background: rgba(15, 23, 42, 0.9); border: 3px solid ${titleColor}; border-radius: 30px; padding: 4.5rem 8rem; text-align: center; box-shadow: 0 0 80px ${glowColor}; max-width: 1200px; margin: 0 auto;">
+      <h1 class="glow-text" style="font-size: 7.5rem; background: ${gradientBg}; -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 40px ${glowColor}); margin-bottom: 0;">
+        ${prizeInfo.houses}
+      </h1>
     </div>
   `;
 }

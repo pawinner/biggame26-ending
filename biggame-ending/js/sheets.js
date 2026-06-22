@@ -19,10 +19,32 @@ const mockTeamsData = [
   { rank: 12, name: "บ้าน L (House L)", score: 600 }
 ];
 
+const mockExtraPrizes = {
+  badLuck: {
+    prize: "ดวงซวยแห่งปี",
+    houses: "บ้าน 4"
+  },
+  goodCitizen: {
+    prize: "คนดีของสังคม",
+    houses: "บ้าน 8 & บ้าน 10"
+  }
+};
+
+function formatHousesList(housesList) {
+  if (housesList.length === 0) return "ไม่มี";
+  const formatted = housesList.map(h => `บ้าน ${h}`);
+  if (formatted.length === 1) return formatted[0];
+  if (formatted.length === 2) return `${formatted[0]} & ${formatted[1]}`;
+  return formatted.slice(0, -1).join(', ') + ' & ' + formatted[formatted.length - 1];
+}
+
 export async function fetchLeaderboardData() {
   if (!GOOGLE_SHEETS_CSV_URL) {
     console.log("No Google Sheet CSV URL set. Loading mock team data.");
-    return mockTeamsData;
+    return {
+      leaderboard: mockTeamsData,
+      extraPrizes: mockExtraPrizes
+    };
   }
 
   try {
@@ -34,14 +56,19 @@ export async function fetchLeaderboardData() {
     return parseCsvData(csvText);
   } catch (error) {
     console.error("Failed to fetch Google Sheets data:", error);
-    return mockTeamsData; // Fallback to mock data if fetch fails
+    return {
+      leaderboard: mockTeamsData,
+      extraPrizes: mockExtraPrizes
+    }; // Fallback to mock data if fetch fails
   }
 }
 
 // Simple CSV Parser
 function parseCsvData(csvText) {
   const lines = csvText.split(/\r?\n/);
-  const results = [];
+  const leaderboard = [];
+  const houseValues = [];
+  let parsingMode = 'leaderboard';
   
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
@@ -49,8 +76,22 @@ function parseCsvData(csvText) {
     
     // Split values, handling commas
     const columns = line.split(',');
-    if (columns.length >= 3) {
-      const rankVal = parseInt(columns[0]);
+    if (columns.length < 3) continue;
+
+    const col0 = columns[0].trim();
+
+    // Check if we need to switch mode
+    if (col0.toUpperCase() === 'HOUSE') {
+      parsingMode = 'extraPrizes';
+      continue;
+    }
+
+    if (col0 === 'อันดับ' || col0 === '') {
+      continue;
+    }
+
+    if (parsingMode === 'leaderboard') {
+      const rankVal = parseInt(col0);
       const houseVal = columns[1] ? columns[1].trim() : "";
       const scoreVal = parseFloat(columns[2]);
       
@@ -58,15 +99,62 @@ function parseCsvData(csvText) {
       if (!isNaN(rankVal) && houseVal !== "") {
         // Format house name (e.g. "5" -> "บ้าน 5")
         const name = houseVal.startsWith("บ้าน") ? houseVal : `บ้าน ${houseVal}`;
-        results.push({
+        leaderboard.push({
           rank: rankVal,
           name: name,
           score: isNaN(scoreVal) ? 0 : scoreVal
         });
       }
+    } else if (parsingMode === 'extraPrizes') {
+      const houseNum = col0;
+      const truthVal = parseInt(columns[1] ? columns[1].trim() : "");
+      const betLoseVal = parseInt(columns[2] ? columns[2].trim() : "");
+
+      if (houseNum !== "" && !isNaN(truthVal) && !isNaN(betLoseVal)) {
+        houseValues.push({
+          house: houseNum,
+          truth: truthVal,
+          betLose: betLoseVal
+        });
+      }
     }
   }
+
+  // Calculate max Bet Lose houses
+  let maxBetLose = -1;
+  let badLuckHouses = [];
+  houseValues.forEach(h => {
+    if (h.betLose > maxBetLose) {
+      maxBetLose = h.betLose;
+      badLuckHouses = [h.house];
+    } else if (h.betLose === maxBetLose) {
+      badLuckHouses.push(h.house);
+    }
+  });
+
+  // Calculate max Truth houses
+  let maxTruth = -1;
+  let goodCitizenHouses = [];
+  houseValues.forEach(h => {
+    if (h.truth > maxTruth) {
+      maxTruth = h.truth;
+      goodCitizenHouses = [h.house];
+    } else if (h.truth === maxTruth) {
+      goodCitizenHouses.push(h.house);
+    }
+  });
   
-  // Sort by rank ascending
-  return results.sort((a, b) => a.rank - b.rank);
+  return {
+    leaderboard: leaderboard.sort((a, b) => a.rank - b.rank),
+    extraPrizes: {
+      badLuck: {
+        prize: "ดวงซวยแห่งปี",
+        houses: formatHousesList(badLuckHouses)
+      },
+      goodCitizen: {
+        prize: "คนดีของสังคม",
+        houses: formatHousesList(goodCitizenHouses)
+      }
+    }
+  };
 }
