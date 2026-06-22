@@ -60,7 +60,7 @@ body {
 }
 
 .glow-text {
-  font-size: 5rem;
+  font-size: 6.5rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -72,7 +72,7 @@ body {
 }
 
 .subtitle {
-  font-size: 1.5rem;
+  font-size: 2.2rem;
   color: rgba(255, 255, 255, 0.6);
   font-weight: 300;
 }
@@ -135,7 +135,7 @@ body {
 .rank-card {
   display: flex;
   align-items: center;
-  height: 85px;
+  height: 105px;
   background: linear-gradient(to bottom, #ca21d0 0%, #a817b0 48%, #8e0b96 52%, #600266 100%);
   border: 3px solid #3d0043;
   border-radius: 8px;
@@ -146,7 +146,7 @@ body {
     inset 0 -4px 4px rgba(0, 0, 0, 0.35);
   font-family: 'Prompt', sans-serif;
   font-weight: 900;
-  font-size: 2.35rem;
+  font-size: 3.1rem;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -205,7 +205,7 @@ body {
 .team-score {
   color: #fbbf24; /* Golden color for score highlight */
   font-weight: 800;
-  font-size: 2.15rem;
+  font-size: 2.9rem;
   margin-right: 5px;
 }
 
@@ -272,7 +272,7 @@ body {
 }
 
 .podium-rank-label {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -303,7 +303,7 @@ body {
 }
 
 .podium-team-name {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   font-weight: 900;
   color: #ffffff;
   white-space: nowrap;
@@ -314,11 +314,11 @@ body {
 }
 
 .first-place .podium-team-name {
-  font-size: 2.2rem;
+  font-size: 2.7rem;
 }
 
 .podium-team-score {
-  font-size: 1.6rem;
+  font-size: 2.0rem;
   font-weight: 800;
   margin-top: 4px;
 }
@@ -370,7 +370,7 @@ body {
 }
 
 .pedestal-number {
-  font-size: 4.5rem;
+  font-size: 5.5rem;
   font-weight: 900;
   line-height: 1;
 }
@@ -417,14 +417,14 @@ body {
 }
 
 .podium-view-container .rank-card {
-  height: 64px;
-  font-size: 1.9rem;
+  height: 74px;
+  font-size: 2.3rem;
   padding: 0 25px;
   border-width: 2.5px;
 }
 
 .podium-view-container .team-score {
-  font-size: 1.8rem;
+  font-size: 2.1rem;
 }
 
 .podium-view-container .card-content {

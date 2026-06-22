@@ -199,10 +199,10 @@ function renderSingleRank(rankNum) {
   const label = rankNum === 2 ? '2nd Place' : '3rd Place';
 
   container.innerHTML = `
-    <h2 style="font-size: 3rem; color: ${color}; text-transform: uppercase; margin-bottom: 1rem;">${label}</h2>
+    <h2 style="font-size: 4.2rem; color: ${color}; text-transform: uppercase; margin-bottom: 1rem;">${label}</h2>
     <div style="background: rgba(30, 41, 59, 0.85); border: 2px solid ${color}; border-radius: 24px; padding: 3rem 5rem; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-      <h1 class="glow-text" style="font-size: 4rem; filter: drop-shadow(0 0 20px ${color});">${team.name}</h1>
-      <p style="font-size: 2rem; color: ${color}; font-weight: 600; margin-top: 1rem;">${team.score.toLocaleString(undefined, { maximumFractionDigits: 4 })}</p>
+      <h1 class="glow-text" style="font-size: 5.8rem; filter: drop-shadow(0 0 20px ${color});">${team.name}</h1>
+      <p style="font-size: 3.2rem; color: ${color}; font-weight: 600; margin-top: 1rem;">${team.score.toLocaleString(undefined, { maximumFractionDigits: 4 })}</p>
     </div>
   `;
 }
@@ -218,10 +218,10 @@ function renderWinner() {
   }
 
   container.innerHTML = `
-    <h2 style="font-size: 4rem; color: #fbbf24; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.1em; animation: pulse 1.5s infinite;">🏆 Big Game Winner 🏆</h2>
+    <h2 style="font-size: 5.5rem; color: #fbbf24; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.1em; animation: pulse 1.5s infinite;">🏆 Big Game Winner 🏆</h2>
     <div style="background: rgba(15, 23, 42, 0.9); border: 3px solid #fbbf24; border-radius: 30px; padding: 4rem 8rem; text-align: center; box-shadow: 0 0 80px rgba(251, 191, 36, 0.3);">
-      <h1 class="glow-text" style="font-size: 6rem; background: linear-gradient(to right, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.6));">${team.name}</h1>
-      <p style="font-size: 2.5rem; color: #f59e0b; font-weight: 800; margin-top: 1.5rem;">Score: ${team.score.toLocaleString(undefined, { maximumFractionDigits: 4 })}</p>
+      <h1 class="glow-text" style="font-size: 8rem; background: linear-gradient(to right, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.6));">${team.name}</h1>
+      <p style="font-size: 3.8rem; color: #f59e0b; font-weight: 800; margin-top: 1.5rem;">Score: ${team.score.toLocaleString(undefined, { maximumFractionDigits: 4 })}</p>
     </div>
   `;
 }
