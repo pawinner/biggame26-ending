@@ -16,6 +16,22 @@ const disasterSound = new Audio('/sounds/disaster.mp3');
 disasterSound.volume = 0.8;
 disasterSound.preload = 'auto';
 
+let disasterSoundPlayMode = null; // 'd' for disaster mode, 'f' for F key, or null
+
+// Limit disaster mode sound to 15 seconds
+disasterSound.addEventListener('timeupdate', () => {
+  if (disasterSoundPlayMode === 'd' && disasterSound.currentTime >= 15) {
+    disasterSound.pause();
+    disasterSound.currentTime = 0;
+    disasterSoundPlayMode = null;
+  }
+});
+
+// Reset play mode when sound finishes naturally
+disasterSound.addEventListener('ended', () => {
+  disasterSoundPlayMode = null;
+});
+
 // Initialize Beep 1 Sound (played when start/restarting)
 const beep1Sound = new Audio('/sounds/beep1.mp3');
 beep1Sound.volume = 0.8;
@@ -25,6 +41,11 @@ beep1Sound.preload = 'auto';
 const beep2Sound = new Audio('/sounds/beep2.mp3');
 beep2Sound.volume = 0.8;
 beep2Sound.preload = 'auto';
+
+// Initialize ELZ Jingle Sound
+const elzJingleSound = new Audio('/sounds/elzjingle.mp3');
+elzJingleSound.volume = 0.8;
+elzJingleSound.preload = 'auto';
 
 let lastCycle = 1;
 let lastStartTime = 0;
@@ -60,17 +81,22 @@ if (isConnected) {
 }
 
 function handleStateUpdate(newState) {
-  // Check if disaster state transitioned
+  const disasterTransitionedOn = newState && newState.disaster && (!state || !state.disaster);
+
   if (newState && newState.disaster) {
     document.body.classList.add('disaster-flash');
-    if (disasterSound.paused) {
+    if (disasterTransitionedOn) {
+      disasterSoundPlayMode = 'd';
       disasterSound.currentTime = 0;
       disasterSound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
     }
   } else {
     document.body.classList.remove('disaster-flash');
-    disasterSound.pause();
-    disasterSound.currentTime = 0;
+    if (disasterSoundPlayMode === 'd') {
+      disasterSound.pause();
+      disasterSound.currentTime = 0;
+      disasterSoundPlayMode = null;
+    }
   }
 
   state = newState;
@@ -234,8 +260,29 @@ window.addEventListener('keydown', (e) => {
       newState.disaster = false;
     }
     setTimerState(newState);
+  } else if (key === 'f') {
+    // Play/Pause disaster sound from 15 seconds (local only)
+    if (disasterSoundPlayMode === 'f') {
+      disasterSound.pause();
+      disasterSound.currentTime = 0;
+      disasterSoundPlayMode = null;
+    } else {
+      disasterSoundPlayMode = 'f';
+      disasterSound.currentTime = 16;
+      disasterSound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
+    }
+  } else if (key === '5') {
+    // Play ELZ Jingle
+    elzJingleSound.currentTime = 0;
+    elzJingleSound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
   } else if (e.key === 'Escape' || key === 'r') {
     // Reset / Stop
+    disasterSound.pause();
+    disasterSound.currentTime = 0;
+    disasterSoundPlayMode = null;
+    elzJingleSound.pause();
+    elzJingleSound.currentTime = 0;
+
     const newState = {
       startTime: 0,
       durationMs: 30000,
