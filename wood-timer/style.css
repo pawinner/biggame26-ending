@@ -455,3 +455,10 @@ body.disaster-flash::after {
 .welcome-btn:active {
   transform: translateY(1px);
 }
+
+/* Hide timer and control elements when toggled off via hotkey "0" */
+body.timer-hidden .back-link-container,
+body.timer-hidden #timer-app {
+  display: none !important;
+}
+

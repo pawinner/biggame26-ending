@@ -217,5 +217,8 @@ window.addEventListener('keydown', (e) => {
       disaster: false
     };
     setTimerState(newState);
+  } else if (key === '0') {
+    // Toggle Timer Visibility on Big Screen
+    document.body.classList.toggle('timer-hidden');
   }
 });
