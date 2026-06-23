@@ -47,7 +47,7 @@ const elzJingleSound = new Audio('/sounds/elzjingle.mp3');
 elzJingleSound.volume = 0.8;
 elzJingleSound.preload = 'auto';
 
-let lastCycle = 1;
+let lastCycle = 0;
 let lastStartTime = 0;
 
 // Initialize Firebase
@@ -118,13 +118,13 @@ function updateUI() {
     cycleBadge.style.display = 'none';
     pausedBadge.style.display = 'none';
     timerApp.classList.remove('low-time');
-    lastCycle = 1;
+    lastCycle = 0;
     lastStartTime = 0;
     return;
   }
 
   let remainingTimeMs = 0;
-  let cycle = 1;
+  let cycle = 0;
   let elapsedMs = 0;
 
   if (state.isPaused) {
@@ -140,19 +140,19 @@ function updateUI() {
   // Detect restart or resume (shift of startTime)
   if (state.startTime !== lastStartTime) {
     if (elapsedMs < countdownDurationMs) {
-      lastCycle = 1;
+      lastCycle = 0;
     } else {
       const timerElapsedMs = elapsedMs - countdownDurationMs;
-      lastCycle = Math.floor(timerElapsedMs / state.durationMs) + 1;
+      lastCycle = Math.floor(timerElapsedMs / state.durationMs);
     }
     lastStartTime = state.startTime;
   }
 
   if (elapsedMs < countdownDurationMs) {
-    cycle = 1;
+    cycle = 0;
     // Update cycle info badge
     cycleBadge.style.display = 'inline-block';
-    cycleBadge.textContent = `Wood Spawn #1`;
+    cycleBadge.textContent = `Wood Spawn #0`;
 
     // Keep circle full
     progressCircle.style.strokeDashoffset = '0';
@@ -167,7 +167,7 @@ function updateUI() {
 
   // Adjust elapsed time by subtracting the countdown duration
   const timerElapsedMs = elapsedMs - countdownDurationMs;
-  cycle = Math.floor(timerElapsedMs / state.durationMs) + 1;
+  cycle = Math.floor(timerElapsedMs / state.durationMs);
   const msInCycle = timerElapsedMs % state.durationMs;
   remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
 
