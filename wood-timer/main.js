@@ -21,6 +21,14 @@ const beep1Sound = new Audio('/sounds/beep1.mp3');
 beep1Sound.volume = 0.8;
 beep1Sound.preload = 'auto';
 
+// Initialize Beep 2 Sound (played when clock hits 0)
+const beep2Sound = new Audio('/sounds/beep2.mp3');
+beep2Sound.volume = 0.8;
+beep2Sound.preload = 'auto';
+
+let lastCycle = 1;
+let lastStartTime = 0;
+
 // Initialize Firebase
 const isConnected = initFirebaseTimer();
 
@@ -84,6 +92,8 @@ function updateUI() {
     cycleBadge.style.display = 'none';
     pausedBadge.style.display = 'none';
     timerApp.classList.remove('low-time');
+    lastCycle = 1;
+    lastStartTime = 0;
     return;
   }
 
@@ -100,6 +110,17 @@ function updateUI() {
   }
 
   const countdownDurationMs = 3000;
+
+  // Detect restart or resume (shift of startTime)
+  if (state.startTime !== lastStartTime) {
+    if (elapsedMs < countdownDurationMs) {
+      lastCycle = 1;
+    } else {
+      const timerElapsedMs = elapsedMs - countdownDurationMs;
+      lastCycle = Math.floor(timerElapsedMs / state.durationMs) + 1;
+    }
+    lastStartTime = state.startTime;
+  }
 
   if (elapsedMs < countdownDurationMs) {
     cycle = 1;
@@ -123,6 +144,13 @@ function updateUI() {
   cycle = Math.floor(timerElapsedMs / state.durationMs) + 1;
   const msInCycle = timerElapsedMs % state.durationMs;
   remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
+
+  // Play beep2.mp3 when the clock hits 0 on every loop
+  if (cycle > lastCycle) {
+    beep2Sound.currentTime = 0;
+    beep2Sound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
+    lastCycle = cycle;
+  }
 
   // Update cycle info badge
   cycleBadge.style.display = 'inline-block';
