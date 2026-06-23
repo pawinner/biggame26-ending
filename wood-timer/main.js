@@ -4,7 +4,7 @@ const circumference = 880;
 
 let state = {
   startTime: 0,
-  durationMs: 60000,
+  durationMs: 30000,
   isRunning: false,
   isPaused: false,
   pausedAt: 0,
@@ -78,7 +78,7 @@ function updateUI() {
   const timerApp = document.getElementById('timer-app');
 
   if (!state || !state.isRunning) {
-    timeDisplay.textContent = '60';
+    timeDisplay.textContent = '30';
     timeLabel.textContent = 'seconds';
     progressCircle.style.strokeDashoffset = '0';
     cycleBadge.style.display = 'none';
@@ -164,10 +164,10 @@ window.addEventListener('keydown', (e) => {
     beep1Sound.currentTime = 0;
     beep1Sound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
 
-    // Start / Restart Loop (60s)
+    // Start / Restart Loop (30s)
     const newState = {
       startTime: Date.now(),
-      durationMs: 60000,
+      durationMs: 30000,
       isRunning: true,
       isPaused: false,
       pausedAt: 0,
@@ -210,7 +210,7 @@ window.addEventListener('keydown', (e) => {
     // Reset / Stop
     const newState = {
       startTime: 0,
-      durationMs: 60000,
+      durationMs: 30000,
       isRunning: false,
       isPaused: false,
       pausedAt: 0,

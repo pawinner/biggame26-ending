@@ -4,7 +4,7 @@ const circumference = 880;
 
 let state = {
   startTime: 0,
-  durationMs: 60000,
+  durationMs: 30000,
   isRunning: false,
   isPaused: false,
   pausedAt: 0,
@@ -96,7 +96,7 @@ function updateUI() {
   const timerApp = document.getElementById('timer-app');
 
   if (!state || !state.isRunning) {
-    timeDisplay.textContent = '60';
+    timeDisplay.textContent = '30';
     timeLabel.textContent = 'Ready';
     progressCircle.style.strokeDashoffset = '0';
     cycleBadge.style.display = 'none';
