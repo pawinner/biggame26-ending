@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lottery - Big Game 2026</title>
+  
+  <!-- Google Fonts: Prompt -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- Floating Ambient Particles -->
+  <div class="ambient-glow bg-glow-left"></div>
+  <div class="ambient-glow bg-glow-right"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="badge-tag">Big Game 2026</div>
+      <h1 class="main-title">รางวัลเลขท้าย 3 ตัว สลากกินแบ่ง BIG GAME</h1>
+    </header>
+
+    <!-- Slot Machine Display -->
+    <main class="slot-machine-wrapper">
+      <div class="slot-container">
+        <!-- Digit 1 -->
+        <div class="slot-card" id="slot-1">
+          <div class="slot-header">หลักที่ 1 <span class="key-hint">[Q]</span></div>
+          <div class="digit-box" data-status="idle">
+            <span class="digit-value">X</span>
+          </div>
+          <div class="slot-footer">
+            <div class="allowed-hint">Allowed: 2, 4, 8</div>
+            <div class="status-indicator">READY</div>
+          </div>
+        </div>
+
+        <!-- Digit 2 -->
+        <div class="slot-card" id="slot-2">
+          <div class="slot-header">หลักที่ 2 <span class="key-hint">[W]</span></div>
+          <div class="digit-box" data-status="idle">
+            <span class="digit-value">X</span>
+          </div>
+          <div class="slot-footer">
+            <div class="allowed-hint">Allowed: 1, 3, 5, 6, 7</div>
+            <div class="status-indicator">READY</div>
+          </div>
+        </div>
+
+        <!-- Digit 3 -->
+        <div class="slot-card" id="slot-3">
+          <div class="slot-header">หลักที่ 3 <span class="key-hint">[E]</span></div>
+          <div class="digit-box" data-status="idle">
+            <span class="digit-value">X</span>
+          </div>
+          <div class="slot-footer">
+            <div class="allowed-hint">Allowed: 6, 7, 9</div>
+            <div class="status-indicator">READY</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Operational Instructions -->
+    <footer class="controls-panel">
+      <div class="control-key-item">
+        <kbd>Q</kbd> <span>Spin/Stop 1st Digit</span>
+      </div>
+      <div class="control-key-item">
+        <kbd>W</kbd> <span>Spin/Stop 2nd Digit</span>
+      </div>
+      <div class="control-key-item">
+        <kbd>E</kbd> <span>Spin/Stop 3rd Digit</span>
+      </div>
+      <div class="control-key-item">
+        <kbd>B</kbd> <span>Toggle Results Board</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Prize Selection Modal Overlay -->
+  <div class="modal-overlay" id="prize-modal">
+    <div class="modal-card">
+      <h2 class="modal-title">Draw Completed!</h2>
+      <p class="modal-subtitle">Assign this number to a prize pool</p>
+      
+      <div class="completed-number-display" id="modal-number-display">
+        <span>-</span><span>-</span><span>-</span>
+      </div>
+
+      <div class="prize-buttons-grid">
+        <button class="prize-btn prize-1st" data-prize="1st">
+          <span class="prize-icon">🥇</span>
+          <span class="prize-label">รางวัลที่ 1</span>
+          <kbd class="btn-kbd">1</kbd>
+        </button>
+        <button class="prize-btn prize-2nd" data-prize="2nd">
+          <span class="prize-icon">🥈</span>
+          <span class="prize-label">รางวัลที่ 2</span>
+          <kbd class="btn-kbd">2</kbd>
+        </button>
+        <button class="prize-btn prize-3rd" data-prize="3rd">
+          <span class="prize-icon">🥉</span>
+          <span class="prize-label">รางวัลที่ 3</span>
+          <kbd class="btn-kbd">3</kbd>
+        </button>
+        <button class="prize-btn btn-discard" data-prize="discard">
+          <span class="prize-icon">🗑️</span>
+          <span class="prize-label">ยกเลิกสลากนี้</span>
+          <kbd class="btn-kbd">D</kbd>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Board Overlay -->
+  <div class="board-overlay" id="board-overlay">
+    <div class="board-container">
+      <header class="board-header">
+        <div class="board-badge">Overview</div>
+        <h2 class="board-title">ผลการออกรางวัลเลขท้าย 3 ตัวสลากกินแบ่ง BIG GAME</h2>
+        <button class="close-board-btn" id="close-board-btn">&times;</button>
+      </header>
+
+      <div class="board-columns-grid">
+        <!-- 2nd Prize Column -->
+        <div class="board-column prize-column-2" id="card-2nd">
+          <div class="column-title">
+            <span class="column-icon">🥈</span> รางวัลที่ 2
+          </div>
+          <div class="winner-display" id="winner-2nd">
+            <div class="no-winner">ยังไม่ได้ออกรางวัล</div>
+          </div>
+          <button class="clear-winner-btn" data-prize="2nd">ออกรางวัลใหม่</button>
+        </div>
+
+        <!-- 1st Prize Column (Center, Grand) -->
+        <div class="board-column prize-column-1" id="card-1st">
+          <div class="column-title">
+            <span class="column-icon">🥇</span> รางวัลที่ 1
+          </div>
+          <div class="winner-display" id="winner-1st">
+            <div class="no-winner">ยังไม่ได้ออกรางวัล</div>
+          </div>
+          <button class="clear-winner-btn" data-prize="1st">ออกรางวัลใหม่</button>
+        </div>
+
+        <!-- 3rd Prize Column -->
+        <div class="board-column prize-column-3" id="card-3rd">
+          <div class="column-title">
+            <span class="column-icon">🥉</span> รางวัลที่ 3
+          </div>
+          <div class="winner-display" id="winner-3rd">
+            <div class="no-winner">ยังไม่ได้ออกรางวัล</div>
+          </div>
+          <button class="clear-winner-btn" data-prize="3rd">ออกรางวัลใหม่</button>
+        </div>
+      </div>
+
+      <footer class="board-footer">
+        <div class="board-stats">
+          บันทึกแล้วทั้งหมด: <span id="board-total-count">0</span> รางวัล
+        </div>
+        <div class="board-actions">
+          <button class="reset-board-btn" id="reset-board-btn">รีเซ็ตข้อมูลทั้งหมด</button>
+          <div class="board-tip">กด <kbd>B</kbd> เพื่อกลับไปที่หน้าหมุนสลาก</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- JS Logic -->
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
