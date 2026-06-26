@@ -3,19 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MDCU Freshy Camp 2026</title>
+  <title>MDCU Freshy Camp 2026 - Central Dashboard</title>
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --card-border: rgba(99, 102, 241, 0.2);
-      --card-hover-border: rgba(99, 102, 241, 0.6);
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --accent-color: #6366f1;
-      --accent-hover: #4f46e5;
+      --bg-dark: #070913;
+      --bg-card: rgba(13, 17, 39, 0.6);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      
+      /* Theme colors */
+      --color-wood: #10b981;
+      --color-wood-glow: rgba(16, 185, 129, 0.15);
+      --color-lottery: #f59e0b;
+      --color-lottery-glow: rgba(245, 158, 11, 0.15);
+      --color-results: #8b5cf6;
+      --color-results-glow: rgba(139, 92, 246, 0.15);
     }
 
     * {
@@ -26,237 +34,457 @@
 
     body {
       font-family: 'Prompt', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-primary);
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.04) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 2rem;
+      padding: 3rem 1.5rem;
       overflow-x: hidden;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       width: 100%;
-      text-align: center;
       z-index: 10;
     }
 
     header {
-      margin-bottom: 4rem;
+      text-align: center;
+      margin-bottom: 4.5rem;
+      position: relative;
+    }
+
+    .badge-hub {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      color: #e5e7eb;
+    }
+
+    .badge-hub .pulse {
+      width: 8px;
+      height: 8px;
+      background-color: #ef4444;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ef4444;
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px #ef4444; }
+      100% { transform: scale(0.9); opacity: 0.6; }
     }
 
     h1 {
-      font-size: 3rem;
+      font-family: 'Space Grotesk', 'Prompt', sans-serif;
+      font-size: 3.5rem;
       font-weight: 800;
-      letter-spacing: -0.025em;
-      margin-bottom: 1rem;
-      background: linear-gradient(to right, #818cf8, #c084fc);
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(to right, #ffffff 30%, #a5b4fc 70%, #818cf8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
 
     p.subtitle {
-      font-size: 1.25rem;
-      color: var(--text-secondary);
+      font-size: 1.15rem;
+      color: var(--text-muted);
       font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
+    /* Section Styling */
+    .dashboard-section {
       margin-bottom: 4rem;
+      background: rgba(10, 12, 26, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
+    /* Unique borders & glows based on section classes */
+    .sec-wood {
+      border-left: 4px solid var(--color-wood);
+      box-shadow: 0 10px 30px -15px var(--color-wood-glow);
+    }
+    .sec-lottery {
+      border-left: 4px solid var(--color-lottery);
+      box-shadow: 0 10px 30px -15px var(--color-lottery-glow);
+    }
+    .sec-results {
+      border-left: 4px solid var(--color-results);
+      box-shadow: 0 10px 30px -15px var(--color-results-glow);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .section-header svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .sec-wood .section-header svg { fill: var(--color-wood); color: var(--color-wood); }
+    .sec-lottery .section-header svg { fill: var(--color-lottery); color: var(--color-lottery); }
+    .sec-results .section-header svg { fill: var(--color-results); color: var(--color-results); }
+
+    .section-header h2 {
+      font-family: 'Space Grotesk', 'Prompt', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .sec-wood .section-header h2 { color: var(--color-wood); }
+    .sec-lottery .section-header h2 { color: var(--color-lottery); }
+    .sec-results .section-header h2 { color: var(--color-results); }
+
+    /* Grid configuration for cards within a section */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Premium Card Styling */
     .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 2.5rem 2rem;
-      text-align: left;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 2rem;
       text-decoration: none;
       color: inherit;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 250px;
+      min-height: 230px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
     }
 
-    .card::before {
+    /* Inner radial glows on hover */
+    .card::after {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
-      transition: opacity 0.4s ease;
       opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+    }
+
+    .sec-wood .card::after {
+      background: radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.1) 0%, transparent 60%);
+    }
+    .sec-lottery .card::after {
+      background: radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.1) 0%, transparent 60%);
+    }
+    .sec-results .card::after {
+      background: radial-gradient(circle at 100% 0%, rgba(139, 92, 246, 0.1) 0%, transparent 60%);
     }
 
     .card:hover {
-      transform: translateY(-8px);
-      border-color: var(--card-hover-border);
-      box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.3);
+      transform: translateY(-5px);
+      background: rgba(20, 25, 50, 0.8);
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
     }
 
-    .card:hover::before {
+    .sec-wood .card:hover { border-color: rgba(16, 185, 129, 0.4); }
+    .sec-lottery .card:hover { border-color: rgba(245, 158, 11, 0.4); }
+    .sec-results .card:hover { border-color: rgba(139, 92, 246, 0.4); }
+
+    .card:hover::after {
       opacity: 1;
     }
 
-    .card-content h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .card-content {
+      position: relative;
+      z-index: 2;
     }
 
-    .card-content p {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+    }
+
+    .badge-card {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+    }
+
+    .sec-wood .badge-card { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .sec-lottery .badge-card { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
+    .sec-results .badge-card { background: rgba(139, 92, 246, 0.1); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.2); }
+
+    .card h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
       line-height: 1.5;
     }
 
-    .card-link {
-      font-size: 1rem;
+    .shortcuts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 1rem;
+    }
+
+    .key {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
       font-weight: 600;
-      color: #818cf8;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e5e7eb;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .card-footer {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
       margin-top: 1.5rem;
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      padding-top: 1rem;
+    }
+
+    .action-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
       transition: gap 0.2s ease;
     }
 
-    .card:hover .card-link {
-      color: #a5b4fc;
-      gap: 0.75rem;
+    .sec-wood .action-text { color: #34d399; }
+    .sec-lottery .action-text { color: #fbbf24; }
+    .sec-results .action-text { color: #a78bfa; }
+
+    .card:hover .action-text {
+      gap: 0.65rem;
     }
 
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 1rem;
-      align-self: flex-start;
-    }
-
-    .badge-dev {
-      background: rgba(245, 158, 11, 0.1);
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.2);
-    }
-
-    .badge-ready {
-      background: rgba(16, 185, 129, 0.1);
-      color: #10b981;
-      border: 1px solid rgba(16, 185, 129, 0.2);
-    }
-
+    /* Footer styling */
     footer {
-      font-size: 0.875rem;
-      color: rgba(148, 163, 184, 0.5);
+      width: 100%;
+      text-align: center;
+      margin-top: auto;
+      padding-top: 4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.85rem;
+      color: rgba(156, 163, 175, 0.4);
+    }
+
+    footer p {
       font-weight: 300;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 2rem 1rem;
+      }
+      h1 {
+        font-size: 2.5rem;
+      }
+      .dashboard-section {
+        padding: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
+      <div class="badge-hub">
+        <span class="pulse"></span>
+        Production Hub
+      </div>
       <h1>MDCU Freshy Camp 2026</h1>
-      <p class="subtitle">Camp Web Applications & Presentation Overlays</p>
+      <p class="subtitle">Real-time web applications, presentation overlays, and game controller dashboard.</p>
     </header>
 
-    <div class="grid">
-      <!-- Wood Spawning Controller Link -->
-      <a href="/wood-timer/index.html" class="card">
-        <div>
-          <span class="badge badge-ready">Live Controller</span>
+    <!-- SECTION 1: WOOD SPAWNING -->
+    <section class="dashboard-section sec-wood">
+      <div class="section-header">
+        <!-- SVG Timer Icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <h2>Wood Spawning</h2>
+      </div>
+      <div class="card-grid">
+        <!-- Wood Timer Board Card -->
+        <a href="/wood-timer/index.html" class="card">
           <div class="card-content">
-            <h2>Wood Spawning Board</h2>
-            <p>Big Screen timer displaying the circular iOS-style countdown. Controls wood spawning via hotkeys (1, Space, Esc).</p>
+            <div class="card-top">
+              <span class="badge-card">Main Board Screen</span>
+            </div>
+            <h3>Wood Spawning Board</h3>
+            <p>Circular iOS-style countdown timer optimized for big screens. Drives the spawning sequence and coordinates state sync via Firebase.</p>
+            <div class="shortcuts">
+              <span class="key">Space</span> <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">Pause/Resume</span>
+              <span class="key">1</span> <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">+1 Min</span>
+              <span class="key">Esc</span> <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">Reset</span>
+            </div>
           </div>
-        </div>
-        <div class="card-link">
-          Open Controller <span>&rarr;</span>
-        </div>
-      </a>
+          <div class="card-footer">
+            <span class="action-text">Launch Main Board <span>&rarr;</span></span>
+          </div>
+        </a>
 
-      <!-- Staff Viewer Link -->
-      <a href="/wood-timer/staff.html" class="card">
-        <div>
-          <span class="badge badge-ready">Mobile Sync</span>
+        <!-- Staff Mobile sync timer -->
+        <a href="/wood-timer/staff.html" class="card">
           <div class="card-content">
-            <h2>Staff Mobile Timer</h2>
-            <p>Mobile-friendly real-time countdown viewer for staff. Synchronized via Firebase, read-only display.</p>
+            <div class="card-top">
+              <span class="badge-card">Staff Sync View</span>
+            </div>
+            <h3>Staff Mobile Timer</h3>
+            <p>Mobile-friendly, lightweight web page for on-field staff members. Dynamically syncs with the main board status in real-time.</p>
           </div>
-        </div>
-        <div class="card-link">
-          Open Staff View <span>&rarr;</span>
-        </div>
-      </a>
+          <div class="card-footer">
+            <span class="action-text">Launch Staff Viewer <span>&rarr;</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
 
-      <!-- OBS Overlay Link -->
-      <a href="/biggame-ending/overlay.html" class="card">
-        <div>
-          <span class="badge badge-dev">Future Overlay</span>
+    <!-- SECTION 2: LOTTERY -->
+    <section class="dashboard-section sec-lottery">
+      <div class="section-header">
+        <!-- SVG Gift/Box Icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="21 8 21 21 3 21 3 8"></polyline>
+          <rect x="1" y="3" width="22" height="5"></rect>
+          <line x1="10" y1="12" x2="14" y2="12"></line>
+        </svg>
+        <h2>Lottery & Draw</h2>
+      </div>
+      <div class="card-grid">
+        <!-- Lottery slot machine Card -->
+        <a href="/lottery/index.html" class="card">
           <div class="card-content">
-            <h2>Big Game Ending Overlay</h2>
-            <p>1920x1080 transparent OBS browser source overlay. Leaderboard reveal animations.</p>
+            <div class="card-top">
+              <span class="badge-card">Slot Draw Screen</span>
+            </div>
+            <h3>Lottery Drawer</h3>
+            <p>Sleek 3-digit slot machine drawer. Features customizable spin limits, prize tier selection (1st, 2nd, 3rd), local cache logs, and summary board overlays.</p>
+            <div class="shortcuts">
+              <span class="key">Q</span> <span class="key">W</span> <span class="key">E</span> <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">Start/Stop Digits</span>
+              <span class="key">B</span> <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">Toggle Summary</span>
+            </div>
           </div>
-        </div>
-        <div class="card-link">
-          Open Overlay <span>&rarr;</span>
-        </div>
-      </a>
+          <div class="card-footer">
+            <span class="action-text">Launch Lottery Draw <span>&rarr;</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
 
-      <!-- Control Page Link -->
-      <a href="/biggame-ending/control.html" class="card">
-        <div>
-          <span class="badge badge-dev">Future Control</span>
+    <!-- SECTION 3: RESULTS -->
+    <section class="dashboard-section sec-results">
+      <div class="section-header">
+        <!-- SVG Trophy Icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+          <path d="M4 22h16"></path>
+          <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"></path>
+          <path d="M12 2a6 6 0 0 1 6 6v7.5A6 6 0 0 1 12 21a6 6 0 0 1-6-7.5V8a6 6 0 0 1 6-6z"></path>
+        </svg>
+        <h2>Ending & Results</h2>
+      </div>
+      <div class="card-grid">
+        <!-- OBS Overlay Card -->
+        <a href="/biggame-ending/overlay.html" class="card">
           <div class="card-content">
-            <h2>Overlay Controller</h2>
-            <p>Real-time control panel for cueing scenes, ranking announcements, and winner screens from another device.</p>
+            <div class="card-top">
+              <span class="badge-card">OBS Source</span>
+            </div>
+            <h3>Big Game Ending Overlay</h3>
+            <p>1920x1080 transparent broadcast canvas. Handles animated reveals of team rankings, podium placement, and special prize categories.</p>
           </div>
-        </div>
-        <div class="card-link">
-          Open Controller <span>&rarr;</span>
-        </div>
-      </a>
+          <div class="card-footer">
+            <span class="action-text">Open OBS Overlay <span>&rarr;</span></span>
+          </div>
+        </a>
 
-      <!-- Lottery Page Link -->
-      <a href="/lottery/index.html" class="card">
-        <div>
-          <span class="badge badge-ready">Lucky Draw</span>
+        <!-- Controller Dashboard Card -->
+        <a href="/biggame-ending/control.html" class="card">
           <div class="card-content">
-            <h2>Lottery Drawer</h2>
-            <p>Slot-machine style 3-digit lottery random display. Spin with Q, W, E and stop with physical inputs under constraints.</p>
+            <div class="card-top">
+              <span class="badge-card">Remote Controller</span>
+            </div>
+            <h3>Overlay Controller</h3>
+            <p>Real-time operator dashboard. Triggers individual team reveals, podium cues, reset events, and status check via Firebase integration.</p>
           </div>
-        </div>
-        <div class="card-link">
-          Open Lottery <span>&rarr;</span>
-        </div>
-      </a>
-    </div>
-
-    <footer>
-      <p>&copy; 2026 MDCU Freshy Camp. Designed with &hearts; for real-time presentation.</p>
-    </footer>
+          <div class="card-footer">
+            <span class="action-text">Open Control Panel <span>&rarr;</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
   </div>
+
+  <footer>
+    <p>&copy; 2026 MDCU Freshy Camp. Designed with &hearts; for real-time presentation and camp operations.</p>
+  </footer>
+
   <script type="module">
     import { inject } from '@vercel/analytics';
     inject();
