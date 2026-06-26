@@ -309,7 +309,8 @@ body::after {
   transition: opacity 0.3s ease;
 }
 
-body.disaster-flash::after {
+body.disaster-flash::after,
+body.times-up-flash::after {
   animation: redBlink 1.2s ease-in-out infinite;
 }
 
@@ -454,6 +455,80 @@ body.disaster-flash::after {
 
 .welcome-btn:active {
   transform: translateY(1px);
+}
+
+/* Times Up Overlay (Big Screen) */
+.times-up-screen-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(17, 3, 6, 0.6) 0%, rgba(5, 1, 2, 0.8) 100%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: times-up-fade-in 0.5s ease-out forwards;
+}
+
+.times-up-banner {
+  text-align: center;
+  padding: 3rem 5rem;
+  background: rgba(244, 63, 94, 0.05);
+  border: 3px solid rgba(244, 63, 94, 0.3);
+  box-shadow: 0 0 50px rgba(244, 63, 94, 0.25), inset 0 0 30px rgba(244, 63, 94, 0.1);
+  border-radius: 40px;
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  animation: banner-pulse 2s infinite ease-in-out;
+}
+
+.times-up-title {
+  display: block;
+  font-size: 7rem;
+  font-weight: 900;
+  color: var(--danger-color);
+  text-shadow: 0 0 20px rgba(244, 63, 94, 0.8), 0 0 40px rgba(244, 63, 94, 0.5);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.times-up-subtitle {
+  display: block;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+@keyframes times-up-fade-in {
+  from { opacity: 0; transform: scale(1.05); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes banner-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 50px rgba(244, 63, 94, 0.25);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 70px rgba(244, 63, 94, 0.4);
+  }
+}
+
+@media (max-width: 768px) {
+  .times-up-title {
+    font-size: 4rem;
+  }
+  .times-up-subtitle {
+    font-size: 1.25rem;
+  }
+  .times-up-banner {
+    padding: 2rem 3rem;
+  }
 }
 
 /* Hide timer and control elements when toggled off via hotkey "0" */

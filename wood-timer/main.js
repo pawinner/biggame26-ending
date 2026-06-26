@@ -8,7 +8,8 @@ let state = {
   isRunning: false,
   isPaused: false,
   pausedAt: 0,
-  disaster: false
+  disaster: false,
+  timesUp: false
 };
 
 // Initialize Disaster Sound
@@ -17,6 +18,11 @@ disasterSound.volume = 0.8;
 disasterSound.preload = 'auto';
 
 let disasterSoundPlayMode = null; // 'd' for disaster mode, 'f' for F key, or null
+
+// Initialize Times Up Sound
+const timesUpSound = new Audio('/sounds/wwtbamlose.mp3');
+timesUpSound.volume = 0.8;
+timesUpSound.preload = 'auto';
 
 // Limit disaster mode sound to 15 seconds
 disasterSound.addEventListener('timeupdate', () => {
@@ -82,6 +88,7 @@ if (isConnected) {
 
 function handleStateUpdate(newState) {
   const disasterTransitionedOn = newState && newState.disaster && (!state || !state.disaster);
+  const timesUpTransitionedOn = newState && newState.timesUp && (!state || !state.timesUp);
 
   if (newState && newState.disaster) {
     document.body.classList.add('disaster-flash');
@@ -96,6 +103,28 @@ function handleStateUpdate(newState) {
       disasterSound.pause();
       disasterSound.currentTime = 0;
       disasterSoundPlayMode = null;
+    }
+  }
+
+  const timesUpOverlay = document.getElementById('times-up-overlay');
+
+  if (newState && newState.timesUp) {
+    document.body.classList.add('times-up-flash');
+    if (timesUpOverlay) {
+      timesUpOverlay.style.display = 'flex';
+    }
+    if (timesUpTransitionedOn) {
+      timesUpSound.currentTime = 0;
+      timesUpSound.play().catch((err) => console.warn("Audio play blocked by browser:", err));
+    }
+  } else {
+    document.body.classList.remove('times-up-flash');
+    if (timesUpOverlay) {
+      timesUpOverlay.style.display = 'none';
+    }
+    if (state && state.timesUp) {
+      timesUpSound.pause();
+      timesUpSound.currentTime = 0;
     }
   }
 
@@ -225,7 +254,8 @@ window.addEventListener('keydown', (e) => {
       isRunning: true,
       isPaused: false,
       pausedAt: 0,
-      disaster: false
+      disaster: false,
+      timesUp: false
     };
     setTimerState(newState);
   } else if (e.key === ' ' || key === 'p') {
@@ -251,6 +281,7 @@ window.addEventListener('keydown', (e) => {
     const newState = { ...state };
     if (!state.disaster) {
       newState.disaster = true;
+      newState.timesUp = false;
       // Pause timer if it is currently running
       if (state.isRunning && !state.isPaused) {
         newState.isPaused = true;
@@ -258,6 +289,21 @@ window.addEventListener('keydown', (e) => {
       }
     } else {
       newState.disaster = false;
+    }
+    setTimerState(newState);
+  } else if (key === 't') {
+    // Toggle Times Up Mode
+    const newState = { ...state };
+    if (!state.timesUp) {
+      newState.timesUp = true;
+      newState.disaster = false;
+      // Pause timer if it is currently running
+      if (state.isRunning && !state.isPaused) {
+        newState.isPaused = true;
+        newState.pausedAt = Date.now();
+      }
+    } else {
+      newState.timesUp = false;
     }
     setTimerState(newState);
   } else if (key === 'f') {
@@ -282,6 +328,8 @@ window.addEventListener('keydown', (e) => {
     disasterSoundPlayMode = null;
     elzJingleSound.pause();
     elzJingleSound.currentTime = 0;
+    timesUpSound.pause();
+    timesUpSound.currentTime = 0;
 
     const newState = {
       startTime: 0,
@@ -289,7 +337,8 @@ window.addEventListener('keydown', (e) => {
       isRunning: false,
       isPaused: false,
       pausedAt: 0,
-      disaster: false
+      disaster: false,
+      timesUp: false
     };
     setTimerState(newState);
   } else if (key === '0') {

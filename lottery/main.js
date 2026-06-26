@@ -436,6 +436,19 @@ function setupEventListeners() {
       return;
     }
 
+    // Escape key to stop/cancel spin or close overlays
+    if (key === 'escape') {
+      if (isModalOpen) {
+        closePrizeModal();
+      }
+      if (isBoardOpen) {
+        toggleBoard(false);
+      }
+      resetSlots();
+      sound.playError();
+      return;
+    }
+
     if (isModalOpen) {
       // Hotkeys for assignment modal
       if (key === '1') {

@@ -8,7 +8,8 @@ let state = {
   isRunning: false,
   isPaused: false,
   pausedAt: 0,
-  disaster: false
+  disaster: false,
+  timesUp: false
 };
 
 // Initialize Beep Sound (played when clock hits 0)
@@ -72,6 +73,7 @@ if (isConnected) {
 
 function handleStateUpdate(newState) {
   const disasterOverlay = document.getElementById('disaster-overlay');
+  const timesUpOverlay = document.getElementById('times-up-overlay');
   
   if (newState && newState.disaster) {
     if (disasterOverlay) {
@@ -80,6 +82,16 @@ function handleStateUpdate(newState) {
   } else {
     if (disasterOverlay) {
       disasterOverlay.style.display = 'none';
+    }
+  }
+
+  if (newState && newState.timesUp) {
+    if (timesUpOverlay) {
+      timesUpOverlay.style.display = 'flex';
+    }
+  } else {
+    if (timesUpOverlay) {
+      timesUpOverlay.style.display = 'none';
     }
   }
 
