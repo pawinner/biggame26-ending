@@ -7,6 +7,8 @@
 class SoundEngine {
   constructor() {
     this.ctx = null;
+    this.lotteryAudio = new Audio('/sounds/lottery.mp3');
+    this.lotteryAudio.preload = 'auto';
   }
 
   init() {
@@ -16,6 +18,53 @@ class SoundEngine {
     // Resume context if suspended (browser security policy)
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
+    }
+  }
+
+  playLotteryFull() {
+    try {
+      this.init();
+      this.lotteryAudio.pause();
+      this.lotteryAudio.currentTime = 0;
+      this.lotteryAudio.loop = false;
+      this.lotteryAudio.play().catch(e => console.warn("Audio play error", e));
+    } catch (e) {
+      console.warn("Audio error", e);
+    }
+  }
+
+  playLotteryLastSecond() {
+    try {
+      this.init();
+      this.lotteryAudio.pause();
+      
+      const playSegment = () => {
+        const duration = this.lotteryAudio.duration;
+        if (duration && !isNaN(duration)) {
+          this.lotteryAudio.currentTime = Math.max(0, duration - 0.5);
+        } else {
+          this.lotteryAudio.currentTime = 0;
+        }
+        this.lotteryAudio.loop = false;
+        this.lotteryAudio.play().catch(e => console.warn("Audio play error", e));
+      };
+
+      if (this.lotteryAudio.readyState >= 1) {
+        playSegment();
+      } else {
+        this.lotteryAudio.addEventListener('loadedmetadata', playSegment, { once: true });
+        this.lotteryAudio.load();
+      }
+    } catch (e) {
+      console.warn("Audio error", e);
+    }
+  }
+
+  stopLottery() {
+    try {
+      this.lotteryAudio.pause();
+    } catch (e) {
+      console.warn("Audio error", e);
     }
   }
 
@@ -280,6 +329,11 @@ function startSpin(slot) {
     slotValues[slot.id].textContent = 'X';
   }
 
+  // Play full lottery sound if all digits are currently X and no slot is spinning
+  if (slots.every(s => s.currentValue === 'X') && slots.every(s => s.state !== 'spinning')) {
+    sound.playLotteryFull();
+  }
+
   slot.state = 'spinning';
   
   const cardEl = slotCards[slot.id];
@@ -335,6 +389,7 @@ function triggerInvalidFeedback(slot) {
 }
 
 function resetSlots() {
+  sound.stopLottery();
   slots.forEach(slot => {
     if (slot.timerId) {
       clearInterval(slot.timerId);
@@ -368,7 +423,7 @@ function checkSlotsCompletion() {
 // Modal Management
 function openPrizeModal(numberString) {
   isModalOpen = true;
-  sound.playJackpot();
+  sound.playLotteryLastSecond();
   
   // Populate digits inside modal
   const spans = modalNumberDisplay.querySelectorAll('span');
