@@ -56,6 +56,154 @@ elzJingleSound.preload = 'auto';
 let lastCycle = 0;
 let lastStartTime = 0;
 
+// --- Canvas Particle System ---
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+
+let particles = [];
+
+function resizeCanvas() {
+  if (canvas) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+  constructor() {
+    this.reset();
+    if (canvas) {
+      this.y = Math.random() * canvas.height;
+    }
+  }
+
+  reset() {
+    if (canvas) {
+      this.x = Math.random() * canvas.width;
+      this.y = canvas.height + 20;
+    } else {
+      this.x = 0;
+      this.y = 0;
+    }
+    this.radius = Math.random() * 2.5 + 0.5;
+    this.speedY = Math.random() * 0.8 + 0.2;
+    this.speedX = Math.random() * 0.4 - 0.2;
+    
+    // Default indigo color
+    this.r = 99;
+    this.g = 102;
+    this.b = 241;
+    this.alpha = Math.random() * 0.5 + 0.1;
+  }
+
+  update(currentMode, isLowTime) {
+    let speedMult = 1.0;
+    
+    if (currentMode === 'disaster') {
+      this.r = 239;
+      this.g = 68;
+      this.b = 68;
+      speedMult = 3.5;
+      this.speedX += (Math.random() * 0.4 - 0.2);
+      this.speedX = Math.max(-2, Math.min(2, this.speedX));
+    } else if (currentMode === 'timesup') {
+      this.r = 244;
+      this.g = 63;
+      this.b = 94;
+      speedMult = 2.0;
+    } else if (currentMode === 'paused') {
+      this.r = 245;
+      this.g = 158;
+      this.b = 11;
+      speedMult = 0.2;
+    } else if (isLowTime) {
+      this.r = 249;
+      this.g = 115;
+      this.b = 22;
+      speedMult = 2.0;
+    } else if (currentMode === 'running') {
+      this.r = 99;
+      this.g = 102;
+      this.b = 241;
+      speedMult = 1.0;
+    } else {
+      this.r = 148;
+      this.g = 163;
+      this.b = 184;
+      speedMult = 0.5;
+    }
+
+    this.y -= this.speedY * speedMult;
+    this.x += this.speedX * speedMult;
+
+    if (this.y < 0) {
+      this.reset();
+    }
+  }
+
+  draw() {
+    if (!ctx) return;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.r}, ${this.g}, ${this.b}, ${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+// Initialize particles
+const particleCount = 75;
+if (canvas) {
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+}
+
+function animateParticles() {
+  if (!canvas || !ctx) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  let currentMode = 'idle';
+  let isLowTime = false;
+
+  if (state && state.isRunning) {
+    if (state.isPaused) {
+      currentMode = 'paused';
+    } else {
+      currentMode = 'running';
+    }
+  }
+  if (state && state.disaster) {
+    currentMode = 'disaster';
+  }
+  if (state && state.timesUp) {
+    currentMode = 'timesup';
+  }
+
+  if (state && state.isRunning && !state.isPaused && !state.disaster && !state.timesUp) {
+    const elapsedMs = Date.now() - state.startTime;
+    const countdownDurationMs = 3000;
+    if (elapsedMs >= countdownDurationMs) {
+      const timerElapsedMs = elapsedMs - countdownDurationMs;
+      const msInCycle = timerElapsedMs % state.durationMs;
+      const remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
+      if (remainingTimeMs < 10000) {
+        isLowTime = true;
+      }
+    }
+  }
+
+  particles.forEach(p => {
+    p.update(currentMode, isLowTime);
+    p.draw();
+  });
+
+  requestAnimationFrame(animateParticles);
+}
+// Start particle animation
+animateParticles();
+
 // Initialize Firebase
 const isConnected = initFirebaseTimer();
 
@@ -133,6 +281,52 @@ function handleStateUpdate(newState) {
 
 // Render loop using requestAnimationFrame
 function updateUI() {
+  // Sync Body Classes for CSS Ambient Glow / Tech Rings
+  let currentMode = 'idle';
+  let isLowTime = false;
+
+  if (state) {
+    if (state.disaster) {
+      currentMode = 'disaster';
+    } else if (state.timesUp) {
+      currentMode = 'timesup';
+    } else if (state.isRunning) {
+      if (state.isPaused) {
+        currentMode = 'paused';
+      } else {
+        currentMode = 'running';
+        
+        const elapsedMs = Date.now() - state.startTime;
+        const countdownDurationMs = 3000;
+        if (elapsedMs >= countdownDurationMs) {
+          const timerElapsedMs = elapsedMs - countdownDurationMs;
+          const msInCycle = timerElapsedMs % state.durationMs;
+          const remainingTimeMs = Math.max(0, state.durationMs - msInCycle);
+          if (remainingTimeMs < 10000) {
+            isLowTime = true;
+          }
+        }
+      }
+    }
+  }
+
+  const possibleClasses = ['state-running', 'state-lowtime', 'state-paused', 'state-disaster', 'state-timesup'];
+  let targetClass = '';
+  if (currentMode === 'disaster') targetClass = 'state-disaster';
+  else if (currentMode === 'timesup') targetClass = 'state-timesup';
+  else if (currentMode === 'paused') targetClass = 'state-paused';
+  else if (currentMode === 'running') {
+    targetClass = isLowTime ? 'state-lowtime' : 'state-running';
+  }
+
+  possibleClasses.forEach(c => {
+    if (c === targetClass) {
+      document.body.classList.add(c);
+    } else {
+      document.body.classList.remove(c);
+    }
+  });
+
   const timeDisplay = document.getElementById('time-display');
   const timeLabel = document.getElementById('time-label');
   const progressCircle = document.getElementById('timer-progress');
@@ -344,5 +538,12 @@ window.addEventListener('keydown', (e) => {
   } else if (key === '0') {
     // Toggle Timer Visibility on Big Screen
     document.body.classList.toggle('timer-hidden');
+  } else if (key === 'h') {
+    // Toggle Hotkeys Panel visibility
+    const hotkeyPanel = document.getElementById('hotkey-panel');
+    if (hotkeyPanel) {
+      hotkeyPanel.classList.toggle('hidden');
+    }
   }
 });
+

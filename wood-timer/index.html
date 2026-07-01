@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <!-- Ambient & Particle Backgrounds -->
+  <div class="ambient-glow"></div>
+  <canvas id="particle-canvas"></canvas>
+
   <div class="back-link-container">
     <a href="../index.html" class="back-link">&larr; Back to Portal</a>
   </div>
@@ -23,11 +27,17 @@
 
     <!-- Circular Timer Progress -->
     <div class="timer-container" id="timer-visual-container">
-      <svg class="timer-svg" viewBox="0 0 320 320">
+      <svg class="timer-svg" viewBox="0 0 340 340">
+        <!-- Outer Tech Ring (Dashed, Rotates) -->
+        <circle class="timer-circle-outer-dash" cx="170" cy="170" r="160" stroke-dasharray="6, 12"></circle>
+        <!-- Outer Solid Ring Border -->
+        <circle class="timer-circle-outer-solid" cx="170" cy="170" r="154"></circle>
         <!-- Background ring -->
-        <circle class="timer-circle-bg" cx="160" cy="160" r="140"></circle>
+        <circle class="timer-circle-bg" cx="170" cy="170" r="140"></circle>
         <!-- Dynamic overlay ring (circumference = 2 * PI * 140 = 879.64px) -->
-        <circle class="timer-circle-progress" id="timer-progress" cx="160" cy="160" r="140" stroke-dasharray="880" stroke-dashoffset="0"></circle>
+        <circle class="timer-circle-progress" id="timer-progress" cx="170" cy="170" r="140" stroke-dasharray="880" stroke-dashoffset="0"></circle>
+        <!-- Inner Tech Dashes -->
+        <circle class="timer-circle-inner-dash" cx="170" cy="170" r="126" stroke-dasharray="3, 8"></circle>
       </svg>
       <div class="timer-text-container">
         <span class="time-display" id="time-display">--</span>
@@ -41,8 +51,8 @@
       <span class="state-paused-badge" id="paused-badge" style="display: none;">PAUSED</span>
     </div>
 
-    <!-- Info & Shortcut panel -->
-    <section class="panel">
+    <!-- Info & Shortcut panel (hidden by default) -->
+    <section class="panel hidden" id="hotkey-panel">
       <div class="status-badge status-disconnected" id="conn-status">
         <span class="status-dot"></span>
         <span id="conn-status-text">Disconnected</span>
@@ -80,6 +90,10 @@
         <div class="hotkey-item">
           <span class="hotkey-label">Hide/Show Display Toggle</span>
           <kbd class="hotkey-key">0</kbd>
+        </div>
+        <div class="hotkey-item">
+          <span class="hotkey-label">Toggle Hotkeys Panel</span>
+          <kbd class="hotkey-key">H</kbd>
         </div>
       </div>
     </section>
